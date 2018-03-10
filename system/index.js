@@ -339,7 +339,7 @@ module.exports = {
       }
       app.use('/' + moduleName, moduleRouter);
     });
+	console.log("---END Settings.js----");
   }
 
-	console.log("---END Settings.js----");
 };
