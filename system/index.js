@@ -64,7 +64,7 @@ var moduleURL = 'modules';
  * @return {Void}
  */
 function startServer() {
-	conosole.log("---starting server----  "+Config.server.port);
+	console.log("---starting server----  "+Config.server.port);
   app.use(function(req, res, next) {
     var output = fs.readFileSync(__dirname + '/../public/index.html');
     res.type('html').send(output);
@@ -84,7 +84,7 @@ function startServer() {
  * @return {Void}
  */
 function systemRoutes(System) {
-	conosole.log("---routes----");
+	console.log("---routes----");
   var routes = [];
   routes = routes.concat(require('./routes/search')(System));
   routes = routes.concat(require('./routes/settings')(System));
@@ -341,5 +341,5 @@ module.exports = {
     });
   }
 
-	conosole.log("---END Settings.js----");
+	console.log("---END Settings.js----");
 };
