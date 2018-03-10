@@ -1,10 +1,10 @@
 {
-  "name": "atwork",
+  "name": "fivetrippycuisiners",
   "main": "index.js",
-  "version": "0.0.0",
-  "homepage": "https://github.com/matterial/atwork",
+  "version": "0.0.1",
+  "homepage": "https://github.com/ramvinoth/fivetrippycuisiners",
   "authors": [
-    "Riten Vagadiya <riten.s.v@gmail.com>"
+    "Ram Vinoth <ramvinoth37@gmail.com>"
   ],
   "moduleType": [
     "node"

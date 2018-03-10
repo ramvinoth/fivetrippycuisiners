@@ -3,13 +3,13 @@ console.log('Config in development');
 module.exports = {
   REQUESTS_DELAY: 0,
   REQUESTS_DELAY_SYSTEM: 0,
-  baseURL: 'http://localhost:8111',
-  db: process.env.MONGOHQ_URL || 'mongodb://' + (process.env.DB_PORT_27017_TCP_ADDR || 'localhost') + '/tamilnetwork',
+  baseURL: 'https://fivetrippycuisiners.herokuapp.com',
+  db: 'mongodb://viyabiz_vinz:viyaSmart$6@ds261078.mlab.com:61078/trippycuisiners'),
   server: {
-    host: 'localhost',
-    port: 8111
+    host: 'https://fivetrippycuisiners.herokuapp.com',
+    port: 
   },
-  secret: 'atworksecret',
+  secret: 'trippycuisinerssecret',
   settings: {
   	perPage: 10,
   	email: {
