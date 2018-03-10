@@ -52,6 +52,7 @@ app.use('/dist', express.static('dist', options));
 app.use('/system', express.static('system/public', options));
 app.use('/system/public/views', express.static('system/public/views', options));
 
+	conosole.log("---middleware passed----");
 /**
  * Path where modules are located
  */
@@ -63,6 +64,7 @@ var moduleURL = 'modules';
  * @return {Void}
  */
 function startServer() {
+	conosole.log("---starting server----  "+Config.server.port);
   app.use(function(req, res, next) {
     var output = fs.readFileSync(__dirname + '/../public/index.html');
     res.type('html').send(output);
@@ -82,6 +84,7 @@ function startServer() {
  * @return {Void}
  */
 function systemRoutes(System) {
+	conosole.log("---routes----");
   var routes = [];
   routes = routes.concat(require('./routes/search')(System));
   routes = routes.concat(require('./routes/settings')(System));
@@ -105,12 +108,14 @@ function systemRoutes(System) {
   });
 }
 
+	conosole.log("---After Routes----");
 /**
  * Load system settings
  * @param  {Object} System The system object
  * @return {Void}
  */
 function loadSettings(System, cb) {
+	conosole.log("---Inside load Settings----");
   SystemSettings.find({}).exec(function(err, settings) {
     if (err) throw err;
     settings.map(function(setting) {
@@ -141,6 +146,7 @@ var dbConnect = function() {
  * @return {Object} Returns the connection object
  */
 var loadPlugins = function(startingPath, System) {
+	conosole.log("---Inside load Plugins----");
   var helpersPath = startingPath + '/helpers';
   if (!fs.existsSync(helpersPath)) {
     return false;
@@ -335,4 +341,5 @@ module.exports = {
     });
   }
 
+	conosole.log("---END Settings.js----");
 };
