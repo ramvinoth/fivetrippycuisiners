@@ -52,7 +52,7 @@ app.use('/dist', express.static('dist', options));
 app.use('/system', express.static('system/public', options));
 app.use('/system/public/views', express.static('system/public/views', options));
 
-	conosole.log("---middleware passed----");
+	console.log("---middleware passed----");
 /**
  * Path where modules are located
  */
@@ -108,14 +108,14 @@ function systemRoutes(System) {
   });
 }
 
-	conosole.log("---After Routes----");
+	console.log("---After Routes----");
 /**
  * Load system settings
  * @param  {Object} System The system object
  * @return {Void}
  */
 function loadSettings(System, cb) {
-	conosole.log("---Inside load Settings----");
+	console.log("---Inside load Settings----");
   SystemSettings.find({}).exec(function(err, settings) {
     if (err) throw err;
     settings.map(function(setting) {
@@ -146,7 +146,7 @@ var dbConnect = function() {
  * @return {Object} Returns the connection object
  */
 var loadPlugins = function(startingPath, System) {
-	conosole.log("---Inside load Plugins----");
+	console.log("---Inside load Plugins----");
   var helpersPath = startingPath + '/helpers';
   if (!fs.existsSync(helpersPath)) {
     return false;
