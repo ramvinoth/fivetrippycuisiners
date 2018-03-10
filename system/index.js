@@ -1,6 +1,7 @@
 /**
  * Load dependencies
  */
+console.log("inside settings.js  : "+process.env.NODE_ENV);
 require('dotenv').load();
 var express = require('express');
 	
