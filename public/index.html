@@ -18,7 +18,7 @@
           <p>Hold on, tightly...</p>
         </div>
       </div>
-      <md-sidenav layout="column" class="site-sidenav md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$media('gt-sm')" ng-if="isLoggedIn">
+      <md-sidenav layout="column" class="site-sidenav md-sidenav-left md-whiteframe-z2" md-component-id="left" ng-if="isLoggedIn">
         <md-toolbar layout="row">
           <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn" ng-if="isLoggedIn">
             <span class="visuallyhidden">Menu</span>
@@ -33,6 +33,9 @@
 
             <!-- Load user streams -->
             <div ng-include="'/modules/streams/views/streamsList.html'"></div>
+
+            <!-- Load user Blogs -->
+            <md-button flex class="btn left-text no-case md-old-style no-bold md-primary ng-scope" href="/blogs">Blogs</md-button>
         </div>
 
       </md-sidenav>
@@ -41,24 +44,24 @@
           <md-toolbar layout="column">
             <div class="md-toolbar-tools">
                 <span class="badge menu-badge" hide-gt-sm ng-if="badges && badges.messageBadge">{{ badges.messageBadge }}</span>
-                <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn" ng-if="isLoggedIn">
+                <button ng-click="toggleSidenav('left')" class="menuBtn" ng-if="isLoggedIn">
                   <span class="visuallyhidden">Menu</span>
                 </button>
                 <!-- <h2 hide-gt-sm flex>{{systemSettings ? systemSettings.workplace : 'AtWork'}}</h2> -->
-                <md-button class="md-old-style" ng-if="isLoggedIn" ng-click="goHome($event)" title="Home">
+                <md-button class="md-old-style" ng-if="isLoggedIn" ng-click="goHome($event)" title="Home" aria-label="Home">
                   <md-inline-list-icon class="fa fa-globe"></md-inline-list-icon>
                 </md-button>
                 <span hide-sm ng-if="!isLoggedIn">{{systemSettings ? systemSettings.workplace : 'AtWork'}}</span>
                 <span hide-sm hide-md class="tiny" flex>&nbsp; {{barTitle}}</span>
                 <span flex hide-md></span>
-                <md-button class="md-old-style" ng-if="isLoggedIn && (user.roles.indexOf('admin') !== -1)" href="/settings" title="Settings">
+                <md-button class="md-old-style" ng-if="isLoggedIn && (user.roles.indexOf('admin') !== -1)" href="/settings" title="Settings" aria-label="Settings">
                   <md-inline-list-icon class="fa fa-cog"></md-inline-list-icon>
                 </md-button>
-                <md-button class="md-old-style" ng-if="isLoggedIn" title="Invite" ng-click="inviteOthers($event)" ng-controller="InviteCtrl">
+                <md-button class="md-old-style" ng-if="isLoggedIn" title="Invite" aria-label="Invite" ng-click="inviteOthers($event)" ng-controller="InviteCtrl">
                   <md-inline-list-icon class="fa fa-envelope"></md-inline-list-icon>
                 </md-button>
                 <div ng-controller="notificationsCtrl">
-                  <md-button class="md-old-style" ng-if="isLoggedIn" ng-click="showUserNotifications($event)" title="Alerts">
+                  <md-button class="md-old-style" ng-if="isLoggedIn" ng-click="showUserNotifications($event)" title="Alerts" aria-label="Alerts">
                     <md-inline-list-icon class="fa fa-bell notification-count"> <span ng-if="notificationCount">{{notificationCount}} </span></md-inline-list-icon>
                   </md-button>
                   
@@ -93,7 +96,7 @@
                   </div>
                 </div>
 
-                <md-button class="user-profile-btn md-old-style" ng-if="isLoggedIn" ng-click="showUserActions($event)" title="Profile">
+                <md-button class="user-profile-btn md-old-style" ng-if="isLoggedIn" ng-click="showUserActions($event)" title="Profile" aria-label="Profile">
                   <md-inline-list-icon class="fa fa-user"></md-inline-list-icon>
                 </md-button>
 

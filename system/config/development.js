@@ -3,11 +3,11 @@ console.log('Config in development');
 module.exports = {
   REQUESTS_DELAY: 0,
   REQUESTS_DELAY_SYSTEM: 0,
-  baseURL: 'https://fivetrippycuisiners.herokuapp.com',
-  db: 'mongodb://viyabiz_vinz:viyaSmart$6@ds261078.mlab.com:61078/trippycuisiners'),
+  baseURL: 'http://localhost:8181',
+  db: process.env.MONGOHQ_URL || 'mongodb://' + (process.env.DB_PORT_27017_TCP_ADDR || 'localhost') + '/trippycuisiners',
   server: {
-    host: 'https://fivetrippycuisiners.herokuapp.com',
-    port: 
+    host: 'localhost',
+    port: '8181'
   },
   secret: 'trippycuisinerssecret',
   settings: {

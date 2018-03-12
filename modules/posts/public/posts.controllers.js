@@ -96,7 +96,7 @@ angular.module('atwork.posts')
         } else if ($scope.detailPage) {
           $scope.feedTitle = 'Written by ' + $scope.feed[0].creator.name;
         } else {
-          $scope.feedTitle = 'Lobby';
+          $scope.feedTitle = 'Global';
         }
       }
 
@@ -137,6 +137,7 @@ angular.module('atwork.posts')
             if ($scope.feedsFilterEnabled) {
               $scope.lastUpdated = 0;
               $scope.noPosting = false;
+              console.log("hetre");
               $scope.updateFeed();
             }
           } else {

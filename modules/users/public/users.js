@@ -16,7 +16,7 @@ angular.module('atwork.users', ['atwork.system'])
           /**
            * FIXME: convert this to an ngResource call
            */
-          $http.get('/users/me').success(function(response) {
+          $http.get('/users/me').then(function(response) {
             var serializedUser = angular.toJson(response.res.record);
             appStorage.set('user', serializedUser);
             cb(response.res.record);

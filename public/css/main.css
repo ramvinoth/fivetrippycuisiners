@@ -33,11 +33,13 @@ a {
 /** ====== Sidenav Related BEGIN ====== */
 .site-sidenav .sidebar-list {
   padding-top: 5px; }
+
 .site-sidenav md-toolbar h1 {
   font-size: 100%;
   font-weight: 400;
   margin: auto;
   text-align: center; }
+
 .site-sidenav h2 {
   font-size: 17px; }
 
@@ -146,6 +148,7 @@ ul.unstyled {
 
 .md-button.no-case {
   text-transform: none; }
+
 .md-button.no-bold {
   font-weight: normal; }
 
@@ -229,6 +232,7 @@ ul.unstyled {
   padding: 20px; }
   .chat-dialog form md-input-container {
     padding-bottom: 0; }
+
 .chat-dialog .chat-listing {
   padding: 0px; }
   .chat-dialog .chat-listing md-list-item {
@@ -273,6 +277,7 @@ ul.unstyled {
   font-size: 14px;
   margin-top: 13px;
   text-transform: uppercase; }
+
 .button-listing .md-button p {
   line-height: 14px;
   font-size: 12px;
@@ -325,6 +330,7 @@ ul.unstyled {
 
 .activities-listing p {
   margin: 5px 0; }
+
 .activities-listing strong {
   text-transform: uppercase; }
 
@@ -341,6 +347,7 @@ ul.unstyled {
     color: #bbb; }
     .user-profile .user-profile-info .status.online {
       color: #95D055; }
+
 .user-profile .user-profile-details {
   margin-top: -9px; }
   .user-profile .user-profile-details md-tabs-wrapper {
@@ -422,6 +429,7 @@ md-toolbar.md-default-theme {
 
 md-dialog md-dialog-content {
   padding: 0; }
+
 md-dialog .md-subheader.md-default-theme {
   background: #eee;
   margin: 0;

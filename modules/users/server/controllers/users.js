@@ -88,6 +88,8 @@ module.exports = function(System) {
       if (!len) {
         roles.push('admin');
         active = true;
+      }else{
+        roles.push('user');
       }
 
       /**

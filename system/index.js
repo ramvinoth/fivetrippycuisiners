@@ -2,7 +2,6 @@
  * Load dependencies
  */
 console.log("inside settings.js  : "+process.env.NODE_ENV);
-require('dotenv').load();
 var express = require('express');
 	
 var app = express();
@@ -28,7 +27,7 @@ var SystemSettings = mongoose.model('settings');
  */
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use(multer({ dest: './public/uploads/'})); // for parsing multipart/form-data
+app.use(multer({ dest: './public/uploads/'}).array('multiInputFileName')); // for parsing multipart/form-data
 app.use(morgan("dev"));
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
