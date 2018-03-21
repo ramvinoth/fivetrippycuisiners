@@ -7,7 +7,7 @@ angular.module('atwork.system', [
   'angularFileUpload', 
   'atwork.utils',
   'angular-loading-bar', 
-  'ngAnimate'
+  'ngAnimate',
 ]);
 
 angular.module('atwork.system')

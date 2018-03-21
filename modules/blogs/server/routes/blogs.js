@@ -15,6 +15,13 @@ module.exports = function(System) {
   });
 
   routes.push({
+    method: 'post',
+    path: '/bogs/add',
+    handler: posts.create,
+    authorized: true
+  });
+
+  routes.push({
     method: 'get',
     path: '/blogs',
     handler: posts.feed,
@@ -34,35 +41,7 @@ module.exports = function(System) {
     handler: posts.streamPosts,
     authorized: true
   });
-
-  routes.push({
-    method: 'get',
-    path: '/:postId',
-    handler: posts.single,
-    authorized: true
-  });
-
-  routes.push({
-    method: 'post',
-    path: '/:postId/like',
-    handler: posts.like,
-    authorized: true
-  });
-
-  routes.push({
-    method: 'post',
-    path: '/:postId/comment',
-    handler: posts.comment,
-    authorized: true
-  });
-
-  routes.push({
-    method: 'get',
-    path: '/:postId/likes',
-    handler: posts.likes,
-    authorized: true
-  });
-
+  
   routes.push({
     method: 'post',
     path: '/:postId/unlike',

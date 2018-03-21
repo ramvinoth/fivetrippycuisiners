@@ -7,6 +7,10 @@ angular.module('atwork.blogs')
         templateUrl: '/modules/blogs/views/blogs.html',
         controller: 'BlogsCtrl'
       })
+      .when('/blogs/add', {
+        templateUrl: '/modules/blogs/views/add-blog.html',
+        controller: 'BlogsCtrl'
+      })
       ;
     $locationProvider.html5Mode(true);
   }]);

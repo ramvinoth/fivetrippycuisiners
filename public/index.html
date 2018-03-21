@@ -6,6 +6,10 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <link rel="stylesheet" href="/bower_components/angular-material/angular-material.min.css">
         <link rel="stylesheet" href="/css/main.css">
+        <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css'>
+        <link rel='stylesheet' href='/bower_components/angular-bootstrap/ui-bootstrap-csp.css'>
+        <link rel='stylesheet' href='/bower_components/summernote/dist/summernote.css'>
+        
         <base href="/"></base>
         <title ng-bind="systemSettings ? systemSettings.workplace : 'AtWork'"></title>
     </head>
@@ -117,7 +121,14 @@
       <script src="/bower_components/socket.io-client/socket.io.js"></script>
       <script src="/dist/libs.js"></script>
       <script src="/dist/scripts.js"></script>
+      
+      <script src='/bower_components/popper.js/dist/umd/popper.min.js'></script>
+      <script src='/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
+      <script src='/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'></script>
 
+      <script src='/bower_components/summernote/dist/summernote.min.js'></script>
+      <script src='/bower_components/angular-summernote/dist/angular-summernote.min.js'></script>
+      
       <!-- Non-critical CSS -->
       <link rel="stylesheet" href="/bower_components/fontawesome/css/font-awesome.min.css">
       <link rel="stylesheet" href="/bower_components/angular-loading-bar/build/loading-bar.min.css">
