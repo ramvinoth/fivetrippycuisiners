@@ -102,7 +102,9 @@ md-content.white {
   min-width: 0px;
   line-height: 30px;
   width: auto;
-  white-space: normal; }
+  white-space: normal;
+  text-align: left;
+  /*Added for LHS align center*/ }
 
 h2 {
   font-weight: 400; }
