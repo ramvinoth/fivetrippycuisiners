@@ -12,13 +12,21 @@ angular.module('atwork.blogs', ['summernote'])
     'appLocation',
     'appWebSocket',
     'appBlogs',
-    function($scope, $rootScope, $routeParams, $timeout, appAuth, appToast, appStorage, appLocation, appWebSocket, appBlogs) {
-      $scope.activity = [{
-        who : 'Ram',
-        what : 'New blog about Food',
-        notes:'city',
-        last: 'false'
-      }];
+    'appBlogsFeed',
+    'resolvedBlogs',
+    function($scope, $rootScope, $routeParams, $timeout, appAuth, appToast, appStorage, appLocation, appWebSocket, appBlogs, appBlogsFeed, resolvedBlogs) {
+      
+      $scope.content = '';
+      $scope.lastUpdated = 0;
+      $scope.postForm = '';
+      $scope.newFeedCount = 0;
+      $scope.feed = [];
+      $scope.feedsFilter = '';
+      $scope.limitComments = true;
+      $scope.feedPage = 0;
+      $scope.showBack = false;
+      $scope.mentionsResults = [];
+
       $scope.options = {
         height: 300,
         focus: true,
@@ -38,8 +46,115 @@ angular.module('atwork.blogs', ['summernote'])
                 ['help', ['help']]
             ]
       };
-      $scope.text = "Hello World";
+      $scope.content = "Hello World";
       $scope.title = "";
+
+
+      
+      /**
+       * Initial feeds
+       */
+      angular.extend($scope, resolvedBlogs.config);
+      doUpdate(resolvedBlogs);
+      /**
+       * Function to update the feed on the client side
+       * @param  {Object} data The data received from endpoint
+       * @return {Void}
+       */
+      function doUpdate(data) {
+        console.log("inside update");
+        var options = data.config || {};
+
+        /**
+         * If it's a filter request, empty the feeds
+         */
+        if ($scope.feedsFilter && !options.append) {
+          $scope.feed = [];
+        }
+        /**
+         * Check whether to append to feed (at bottom) or insert (at top)
+         */
+        if (!options.append) {
+          $scope.feed = data.res.records.concat($scope.feed);
+        } else {
+          $scope.feed = $scope.feed.concat(data.res.records);
+        }
+        /**
+         * Check if there are more pages
+         * @type {Boolean}
+         */
+        $scope.noMorePosts = !data.res.morePages;
+        /**
+         * Set the updated timestamp
+         */
+        $scope.lastUpdated = Date.now();
+        $scope.showBack = false;
+
+        /**
+         * Set page title
+         */
+        if ($scope.timelinePage) {
+          $scope.feedTitle = 'Blogs';
+        }
+      }
+
+      /**
+       * Create a new post
+       * @param  {Boolean} isValid Will be true if form validation passes
+       * @return {Void}
+       */
+      $scope.create = function(isValid, item) {
+        if (isValid) {
+          var blog = new appBlogs.single({
+            title: this.title,
+            short_title: this.title.substr(1, 20),
+            content: this.content,
+            short_desc: this.content.substr(1, 50),
+          });
+          
+          blog.$save(function(response) {
+            if (response.success) {
+              
+              /**
+               * We are the creator ourselves, we know that
+               * @type {Object}
+               */
+              response.res = angular.extend(response.res, {
+                creator: appAuth.getUser()
+              });
+              
+              /**
+               * Update feed
+               * @type {Object}
+               */
+              console.log("response", response.res);
+               //$scope.updateFeed();
+
+              //$scope.reset();
+            } else {
+              $scope.failure = true;
+              appToast(response.res.message);
+            }
+          });
+        } else {
+          
+        }
+      };
+    }
+  ])
+  .controller('AddBlogCtrl' [
+    '$scope',
+    '$rootScope',
+    '$routeParams',
+    '$timeout',
+    'appAuth',
+    'appToast',
+    'appStorage',
+    'appLocation',
+    'appWebSocket',
+    'appBlogsFeed',
+    function($scope, $rootScope, $routeParams, $timeout, appAuth, appToast, appStorage, appLocation, appWebSocket, appBlogsFeed){
+      $scope.title= "Hello World";
     }
   ])
   ;

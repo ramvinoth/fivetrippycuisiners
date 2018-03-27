@@ -31,12 +31,14 @@ var BlogSchema = new Schema({
         required: true,
         ref: 'User'
     },
-    short_name: {
+    short_title: {
         type : String,
         required: true,
     },
-    name: {
+    title: {
         type : String,
+        required: true,
+        get: escapeProperty
     },
     short_desc: {
         type : String,
