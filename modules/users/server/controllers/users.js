@@ -149,7 +149,9 @@ module.exports = function(System) {
       var user = new User(req.body);
       user.provider = 'local';
       user.roles = roles;
-      user.token = jwt.sign(user, System.config.secret);
+      user.token = jwt.sign({data: user}, System.config.secret, {
+        expiresIn: 604800 // 1 week
+      });
       user.active = active;
 
       user.save(function(err, user) {
