@@ -14,7 +14,14 @@ angular.module('atwork.blogs')
         templateUrl: '/modules/blogs/views/add-blog.html',
         controller: 'BlogsCtrl',
         resolve: {
-          resolvedBlogs: resolvedBlogs({limitComments: true})
+          resolvedBlogs: resolvedBlogs({limitComments: true, makeCall: false})
+        }
+      })
+      .when('/blog/:blogId', {
+        templateUrl: '/modules/blogs/views/blog-single.html',
+        controller: 'BlogsCtrl',
+        resolve: {
+          resolvedBlogs: resolvedBlogs({limitComments: false})
         }
       })
       ;

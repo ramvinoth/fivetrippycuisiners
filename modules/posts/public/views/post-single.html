@@ -30,7 +30,7 @@
 
             <!-- Comment -->
             <div layout="row" ng-if="item.commentEnabled">
-              <form flex="50" flex-sm="100" flex-md="100" name="replyForm" ng-submit="comment(replyForm.$valid, item)" novalidate>
+              <form flex="100" flex-sm="100" flex-md="100" name="replyForm" ng-submit="comment(replyForm.$valid, item)" novalidate>
                 <md-input-container>
                   <label>Write your reply...</label>
                   <textarea set-focus="item.commentEnabled" name="content" ng-model="content" id="status-{{item._id}}" cols="30" rows="2" required md-maxlength="500" minlength="3"></textarea>

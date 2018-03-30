@@ -15,7 +15,7 @@ module.exports = function(System) {
         var post = data.post;
         var actor = data.actor;
         post.notifyUsers({
-          postId: post._id,
+          blogId: post._id,
           actorId: actor._id,
           type: action,
           config: {
@@ -48,7 +48,7 @@ module.exports = function(System) {
              */
             user.notify({
               actorId: req.user._id,
-              postId: post._id,
+              blogId: post._id,
               notificationType: 'mention'
             }, System);
   
@@ -67,7 +67,7 @@ module.exports = function(System) {
          * @type {Void}
          */
         req.user.notifyFollowers({
-          postId: post._id,
+          blogId: post._id,
           streamId: post.stream ? post.stream : false,
           notificationType: 'feed',
           config: {
@@ -90,8 +90,8 @@ module.exports = function(System) {
      * @return {Void}
      */
     obj.comment = function(req, res) {
-      var postId = req.params.postId;
-      Blog.findOne({ _id: postId })
+      var blogId = req.params.blogId;
+      Blog.findOne({ _id: blogId })
       .populate('creator')
       .populate('comments')
       .populate('stream')
@@ -297,7 +297,7 @@ module.exports = function(System) {
      */
     obj.single = function(req, res) {
       Blog.findOne({
-        _id: req.params.postId
+        _id: req.params.blogId
       })
       .populate('creator')
       .populate('comments')
@@ -352,7 +352,7 @@ module.exports = function(System) {
      * @return {Void}
      */
     obj.like = function(req, res) {
-      Blog.findOne({_id: req.params.postId})
+      Blog.findOne({_id: req.params.blogId})
       .populate('creator')
       .populate('comments')
       .populate('stream')
@@ -390,7 +390,7 @@ module.exports = function(System) {
      * @return {Void}
      */
     obj.likes = function(req, res) {
-      Blog.findOne({_id: req.params.postId})
+      Blog.findOne({_id: req.params.blogId})
       .populate('likes')
       .exec(function(err, post) {
         if (err) {
@@ -413,7 +413,7 @@ module.exports = function(System) {
      * @return {Void}
      */
     obj.unlike = function(req, res) {
-      Blog.findOne({_id: req.params.postId})
+      Blog.findOne({_id: req.params.blogId})
       .populate('creator')
       .populate('comments')
       .populate('stream')

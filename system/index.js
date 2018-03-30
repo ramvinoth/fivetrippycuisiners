@@ -15,7 +15,7 @@ var multer = require('multer');
 var morgan = require('morgan');
 var path = require('path');
 var nodemailer = require('nodemailer');
-
+var UPLOAD_PATH = "./public/uploads/";
 /**
  * Load the settings model
  */
@@ -27,7 +27,15 @@ var SystemSettings = mongoose.model('settings');
  */
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use(multer({ dest: './public/uploads/'}).array('multiInputFileName')); // for parsing multipart/form-data
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, UPLOAD_PATH)
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname))
+  }
+});
+app.use(multer({ dest : UPLOAD_PATH }).array('file')); // for parsing multipart/form-data
 app.use(morgan("dev"));
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');

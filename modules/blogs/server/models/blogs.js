@@ -91,7 +91,7 @@ var BlogSchema = new Schema({
         type: Date, 
         default: Date.now 
     }
-});
+}, { usePushEach: true });
 
 /**
  * Methods

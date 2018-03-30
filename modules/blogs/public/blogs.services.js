@@ -6,6 +6,23 @@ angular.module('atwork.blogs')
       return {
         single: $resource('blogs/:blogId/:action', {
             blogId: '@_id'
+          }, {
+            like: {
+              method: 'POST',
+              params: {action: 'like'}
+            },
+            unlike: {
+              method: 'POST',
+              params: {action: 'unlike'}
+            },
+            comment: {
+              method: 'POST',
+              params: {action: 'comment'}
+            },
+            likes: {
+              method: 'GET',
+              params: {action: 'likes'}
+            }
           }),
         feed: $resource('blogs/'),
       }
@@ -81,7 +98,7 @@ angular.module('atwork.blogs')
           options = options || {};
           var userId = options.userId;
           var hashtag = options.hashtag;
-          var postId = options.postId;
+          var blogId = options.blogId;
           var streamId = options.streamId;
           var passedData = options.passedData;
 
@@ -143,7 +160,7 @@ angular.module('atwork.blogs')
             }, function() {
               doUpdate(streamsData);
             });
-          } else if (postId) {
+          } else if (blogId) {
             /**
              * SINGLE: If there is a postId, let's load a single feed
              */
@@ -171,7 +188,7 @@ angular.module('atwork.blogs')
              * Prepare the request
              */
             var timelineData = appBlogs.single.get({
-              postId: postId, 
+              blogId: blogId, 
               limitComments: config.limitComments,
               allowMarking: true
             }, function() {
@@ -241,6 +258,115 @@ angular.module('atwork.blogs')
     }
   ])
   .directive('awBlogItem', [
+    'appBlogs',
+    'appWebSocket',
+    'appAuth',
+    'appDialog',
+    function(appBlogs, appWebSocket, appAuth, appDialog) {
+      return {
+        templateUrl: '/modules/blogs/views/blog-row.html',
+        controller: [
+          '$scope',
+          function($scope) {
+
+            /**
+             * Like the post
+             * @param  {Object} item The item object
+             * @return {Void}      
+             */
+            $scope.doLike = function(item) {
+              item.liked = true;
+              appBlogs.single.like(item, function(response) {
+                angular.extend(item, response.res.record);
+              });
+            };
+
+            /**
+             * Unlike the post
+             * @param  {Object} item The item object
+             * @return {Void}      
+             */
+            $scope.undoLike = function(item) {
+              item.liked = false;
+              appBlogs.single.unlike(item, function(response) {
+                angular.extend(item, response.res.record);
+              });
+            };
+
+            /**
+             * Comment on a post
+             * @param  {Boolean} isValid Will be true if form validation passes
+             * @return {Void}
+             */
+            $scope.comment = function(isValid, item) {
+              if (isValid) {
+                var commentContent = this.content;
+                
+                /**
+                 * Enable client side comments update for faster response time
+                 */
+                item.commentEnabled = false;
+                item.comments.unshift({
+                  creator: appAuth.getUser(),
+                  content: commentContent
+                });
+
+                item.comment = commentContent;
+
+                appBlogs.single.comment(item, function(response) {
+                  angular.extend(item, response.res.record);
+                  item.commentEnabled = false;
+                });
+                
+              }
+            };
+
+            /**
+             * Show the list of likers for a specific post
+             * @param  {Object} item The post item
+             * @return {Void}
+             */
+            $scope.showLikers = function(ev, item) {
+              /**
+               * Get the likers
+               */
+              appBlogs.single.likes({
+                postId: item._id
+              }, function(response) {
+                /**
+                 * Show dialog
+                 */
+                appDialog.show({
+                  controller: [
+                    '$scope',
+                    'appDialog',
+                    function($scope, appDialog) {
+                      /**
+                       * Assign likers to the users variable
+                       * @type {Array}
+                       */
+                      $scope.users = response.res.records;
+                      /**
+                       * Hide the dialog
+                       * @return {Void}
+                       */
+                      $scope.hide = function() {
+                        appDialog.hide();
+                      };
+                    }
+                  ],
+                  templateUrl: '/modules/users/views/users-dialog.html',
+                  targetEvent: ev,
+                });
+              });
+            };
+
+          }
+        ]
+      }
+    }
+  ])
+  .directive('awBlogSingle', [
     'appBlogs',
     'appWebSocket',
     'appAuth',

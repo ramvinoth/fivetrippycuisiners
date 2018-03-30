@@ -27,6 +27,8 @@ angular.module('atwork.blogs', ['summernote'])
       $scope.showBack = false;
       $scope.mentionsResults = [];
 
+      var blogId = $scope.detailPage = $routeParams.blogId;
+
       $scope.options = {
         height: 300,
         focus: true,
@@ -62,7 +64,6 @@ angular.module('atwork.blogs', ['summernote'])
        * @return {Void}
        */
       function doUpdate(data) {
-        console.log("inside update");
         var options = data.config || {};
 
         /**
@@ -79,6 +80,7 @@ angular.module('atwork.blogs', ['summernote'])
         } else {
           $scope.feed = $scope.feed.concat(data.res.records);
         }
+
         /**
          * Check if there are more pages
          * @type {Boolean}
@@ -127,7 +129,7 @@ angular.module('atwork.blogs', ['summernote'])
                * Update feed
                * @type {Object}
                */
-              console.log("response", response.res);
+              //console.log("response", response.res);
                //$scope.updateFeed();
 
               //$scope.reset();
@@ -140,6 +142,139 @@ angular.module('atwork.blogs', ['summernote'])
           
         }
       };
+
+      $scope.viewBlog = function(blogId){
+        console.log("blogId",blogId);
+        appLocation.url('/blog/'+blogId);
+      };
+
+      /**
+       * Update a single item in the existing list if it exists
+       * @param  {[type]} postId [description]
+       * @return {[type]}        [description]
+       */
+      var updateItem = function(e, data) {
+        _.each($scope.feed, function(candidate, i) {
+          if (candidate._id == data.postId) {
+            (function(item) {
+              var params = {
+                postId: data.postId
+              };
+              if ($scope.detailPage && item._id === $routeParams.postId) {
+                params.allowMarking = true;
+              }
+              if (item._id == data.postId) {
+                var post = appBlogs.single.get(params, function() {
+                  angular.extend(item, post.res.record);
+                });
+              }
+            })(candidate);
+          }
+
+        });
+      };
+
+      /**
+       * Enable socket listeners
+       */
+      $rootScope.$on('like', updateItem);
+      $rootScope.$on('unlike', updateItem);
+      $rootScope.$on('comment', updateItem);
+
+
+      /**
+       * Like the post
+       * @param  {Object} item The item object
+       * @return {Void}      
+       */
+      $scope.doLike = function(item) {
+        item.liked = true;
+        appBlogs.single.like(item, function(response) {
+          angular.extend(item, response.res.record);
+        });
+      };
+
+      /**
+       * Unlike the post
+       * @param  {Object} item The item object
+       * @return {Void}      
+       */
+      $scope.undoLike = function(item) {
+        item.liked = false;
+        appBlogs.single.unlike(item, function(response) {
+          angular.extend(item, response.res.record);
+        });
+      };
+
+      /**
+       * Comment on a post
+       * @param  {Boolean} isValid Will be true if form validation passes
+       * @return {Void}
+       */
+      $scope.comment = function(isValid, item) {
+        console.log("ssss");
+        if (isValid) {
+          var commentContent = this.content;
+          
+          /**
+           * Enable client side comments update for faster response time
+           */
+          item.commentEnabled = false;
+          item.comments.unshift({
+            creator: appAuth.getUser(),
+            content: commentContent
+          });
+
+          item.comment = commentContent;
+
+          appBlogs.single.comment(item, function(response) {
+            angular.extend(item, response.res.record);
+            item.commentEnabled = false;
+          });
+          
+        }
+      };
+
+      /**
+       * Show the list of likers for a specific post
+       * @param  {Object} item The post item
+       * @return {Void}
+       */
+      $scope.showLikers = function(ev, item) {
+        /**
+         * Get the likers
+         */
+        appBlogs.single.likes({
+          postId: item._id
+        }, function(response) {
+          /**
+           * Show dialog
+           */
+          appDialog.show({
+            controller: [
+              '$scope',
+              'appDialog',
+              function($scope, appDialog) {
+                /**
+                 * Assign likers to the users variable
+                 * @type {Array}
+                 */
+                $scope.users = response.res.records;
+                /**
+                 * Hide the dialog
+                 * @return {Void}
+                 */
+                $scope.hide = function() {
+                  appDialog.hide();
+                };
+              }
+            ],
+            templateUrl: '/modules/users/views/users-dialog.html',
+            targetEvent: ev,
+          });
+        });
+      };
+
     }
   ])
   .controller('AddBlogCtrl' [

@@ -464,12 +464,12 @@ module.exports = function(System) {
    */
   obj.avatar = function(req, res) {
     var user = req.user;
-    var file = req.files.file;
-
+    var file = req.files[0];
+    var file_extension = file.mimetype.replace('image/','');
     /**
      * Check extension
      */
-    if (['png', 'jpg', 'jpeg', 'gif'].indexOf(file.extension) === -1) {
+    if (['png', 'jpg', 'jpeg', 'gif'].indexOf(file_extension) === -1) {
       return json.unhappy({message: 'Only images allowed.'}, res);
     }
 
@@ -501,22 +501,34 @@ module.exports = function(System) {
       ACL: 'public-read'
     };
 
-    var s3 = new AWS.S3();
+    if(AWS.config.accessKeyId !== undefined){
+      var s3 = new AWS.S3();
 
-    /**
-     * Upload to s3
-     */
-    s3.putObject(params, function(error, data) {
-      if (error) {
-        throw error;
+      /**
+       * Upload to s3
+       */
+      s3.putObject(params, function(error, data) {
+        if (error) {
+          throw error;
+        }
+      });
+
+      /**
+       * Update the user with the s3 path, even if its not yet uploaded
+       * @type {String}
+       */
+      user.face = 'https://s3.amazonaws.com/atwork/' + filename;
+    }else{
+
+      /**
+       * Update the user with the system path, even if its not yet uploaded
+       * @type {String}
+       */
+      if(user.face !== ""){
+        fs.unlinkSync("./public/"+user.face);
       }
-    });
-
-    /**
-     * Update the user with the s3 path, even if its not yet uploaded
-     * @type {String}
-     */
-    user.face = 'https://s3.amazonaws.com/atwork/' + filename;
+      user.face = 'uploads/' + filename;
+    }
     user.save();
 
     /**
