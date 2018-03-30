@@ -525,7 +525,11 @@ module.exports = function(System) {
        * @type {String}
        */
       if(user.face !== ""){
-        fs.unlinkSync("./public/"+user.face);
+        try{
+          fs.unlinkSync("./public/"+user.face); 
+        }catch(e){
+          console.log(Error,e);
+        }
       }
       user.face = 'uploads/' + filename;
     }
