@@ -524,11 +524,11 @@ module.exports = function(System) {
        * Update the user with the system path, even if its not yet uploaded
        * @type {String}
        */
-      if(user.face !== ""){
+      if(user.face !== "" && user.face !== undefined){
         try{
           fs.unlinkSync("./public/"+user.face); 
         }catch(e){
-          console.log(Error,e);
+          console.log("Error",e);
         }
       }
       user.face = 'uploads/' + filename;
