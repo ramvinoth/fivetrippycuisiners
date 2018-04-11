@@ -124,7 +124,7 @@ angular.module('atwork.blogs', ['summernote'])
               response.res = angular.extend(response.res, {
                 creator: appAuth.getUser()
               });
-              
+              appLocation.url('/blog');
               /**
                * Update feed
                * @type {Object}

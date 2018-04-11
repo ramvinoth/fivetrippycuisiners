@@ -7,6 +7,7 @@ angular.module('atwork.posts')
     '$rootScope',
     '$routeParams',
     '$timeout',
+    '$upload',
     'appPosts',
     'appAuth',
     'appToast',
@@ -16,7 +17,8 @@ angular.module('atwork.posts')
     'appUsersSearch',
     'appPostsFeed',
     'resolvedFeeds',
-    function($scope, $route, $rootScope, $routeParams, $timeout, appPosts, appAuth, appToast, appStorage, appLocation, appWebSocket, appUsersSearch, appPostsFeed, resolvedFeeds) {
+    'UploadService',
+    function($scope, $route, $rootScope, $routeParams, $timeout, $upload, appPosts, appAuth, appToast, appStorage, appLocation, appWebSocket, appUsersSearch, appPostsFeed, resolvedFeeds, UploadService) {
       $scope.content = '';
       $scope.lastUpdated = 0;
       $scope.postForm = '';
@@ -27,6 +29,7 @@ angular.module('atwork.posts')
       $scope.feedPage = 0;
       $scope.showBack = false;
       $scope.mentionsResults = [];
+      $scope.filesToUpload = UploadService.getFilesToUpload;
 
       var hashtag = $routeParams.hashtag;
       var userId = $scope.timelinePage = $routeParams.userId;
@@ -204,6 +207,8 @@ angular.module('atwork.posts')
        */
       $scope.reset = function(frm) {
         $scope.content = '';
+        $rootScope.filesSrc = [];
+        angular.element("input[type='file']").val(null);
         $timeout(function() {
           $scope.postForm.$setPristine();
           $scope.postForm.$setUntouched();
@@ -273,12 +278,23 @@ angular.module('atwork.posts')
        */
       $scope.create = function(isValid, item) {
         if (isValid) {
-          var post = new appPosts.single({
+          var files = UploadService.getFilesToUpload();
+          console.log("files", files);
+          var data = {
             content: this.content,
-            stream: streamId
-          });
-          
-          post.$save(function(response) {
+            stream: streamId,
+            files: files
+          };
+
+          $upload.upload({
+            url: '/posts/',
+            arrayKey: '',
+            file: files[0],
+            data: data
+          }).progress(function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            //console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+          }).success(function (response, status, headers, config) {
             if (response.success) {
               
               /**

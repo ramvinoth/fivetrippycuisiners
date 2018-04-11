@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Post = mongoose.model('Post');
-
+var gallery = require("../../../galleries/server/models/gallery");
+var Gallery = mongoose.model("Gallery");
 module.exports = function(System) {
   var obj = {};
   var json = System.plugins.JSON;
@@ -33,8 +34,11 @@ module.exports = function(System) {
    * @return {Void}
    */
   obj.create = function(req, res) {
-    var post = new Post(req.body);
+    var post = new Post(JSON.parse(req.body.data));
+    var gallery = obj.upload(req, res);
+    var gallery_id = gallery._id;
     post.creator = req.user._id;
+    post.attachments.push(gallery_id);
     post.save(function(err) {
       post = post.afterSave(req.user);
 
@@ -152,6 +156,7 @@ module.exports = function(System) {
       .populate('creator')
       .populate('comments')
       .populate('stream')
+      .populate('attachments')
       .populate('comments.creator')
       .skip(parseInt(req.query.page) * System.config.settings.perPage)
       .limit(System.config.settings.perPage+1)
@@ -218,6 +223,7 @@ module.exports = function(System) {
       .populate('creator')
       .populate('stream')
       .populate('comments')
+      .populate('attachments')
       .populate('comments.creator')
       .skip(parseInt(req.query.page) * System.config.settings.perPage)
       .limit(System.config.settings.perPage+1)
@@ -267,6 +273,7 @@ module.exports = function(System) {
     .populate('creator')
     .populate('comments')
     .populate('stream')
+    .populate('attachments')
     .populate('comments.creator')
     .skip(parseInt(req.query.page) * System.config.settings.perPage)
     .limit(System.config.settings.perPage+1)
@@ -444,6 +451,95 @@ module.exports = function(System) {
     });
   };
 
+  /**
+   * Upload attachment and return imgURL
+   * @param  {Object} req Request
+   * @param  {Object} res Response
+   * @return {String} image_url      
+   */
+  obj.upload = function(req, res) {
+    var gallery = new Gallery();
+    var user = req.user;
+    var file = req.files[0];
+    var file_extension = file.mimetype.replace('image/','');
+    /**
+     * Check extension
+     */
+    if (['png', 'jpg', 'jpeg', 'gif'].indexOf(file_extension) === -1) {
+      return json.unhappy({message: 'Only images allowed.'}, res);
+    }
+
+    /**
+     * Get file name
+     * @type {String}
+     */
+    var filename = file.path.substr(file.path.lastIndexOf('/')+1);
+
+    var fs = require('fs');
+    var AWS = require('aws-sdk');
+    
+    /**
+     * Config params stored in the environment
+     * @type {String}
+     */
+    AWS.config.accessKeyId = System.config.aws.accessKeyId;
+    AWS.config.secretAccessKey = System.config.aws.secretAccessKey;
+
+    /**
+     * Set bucket and other params
+     * @type {Object}
+     */
+    var params = {
+      Bucket: 'atwork', 
+      Key: filename,
+      Body: fs.readFileSync(file.path),
+      ContentType: 'application/image',
+      ACL: 'public-read'
+    };
+
+    if(AWS.config.accessKeyId !== undefined){
+      var s3 = new AWS.S3();
+
+      /**
+       * Upload to s3
+       */
+      s3.putObject(params, function(error, data) {
+        if (error) {
+          throw error;
+        }
+      });
+
+      /**
+       * Update the user with the s3 path, even if its not yet uploaded
+       * @type {String}
+       */
+      gallery.url = 'https://s3.amazonaws.com/atwork/' + filename;
+    }else{
+
+      /**
+       * Update the user with the system path, even if its not yet uploaded
+       * @type {String}
+       */
+      try{
+        if(gallery.url !== "" && gallery.url !== undefined){
+          fs.unlinkSync("./public/"+gallery.url);
+        } 
+      }catch(e){
+          console.log("Error",e);
+      }
+      gallery.url = 'uploads/' + filename;
+    }
+
+    gallery.creator = user;
+    gallery.filename = filename;
+    gallery.save();
+    /**
+     * Return a locally uploaded file for faster response
+     * @type {String}
+     */
+    return gallery;
+
+  };
 
 
   return obj;

@@ -34,6 +34,11 @@ var PostSchema = new Schema({
     required: true,
     get: escapeProperty
   },
+  attachments: [{
+    type: Schema.ObjectId,
+    required: false,
+    ref: 'Gallery'
+  }],
   comments: [{
     created: {
       type: Date,
@@ -44,6 +49,11 @@ var PostSchema = new Schema({
       required: true,
       get: escapeProperty
     },
+    attachments: [{
+      type: Schema.ObjectId,
+      required: false,
+      ref: 'Gallery'
+    }],
     creator: {
       type: Schema.ObjectId,
       required: true,

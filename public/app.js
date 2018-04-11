@@ -4,6 +4,7 @@ var app = angular.module('AtWork', [
   'atwork.posts', 
   'atwork.streams',
   'atwork.blogs', 
+  'atwork.galleries', 
   'atwork.chats', 
   'atwork.activities', 
   'atwork.notifications', 
@@ -120,3 +121,34 @@ app.controller('AppCtrl', [
     });
   }
 ]);
+
+app.factory('UploadService', function(){
+  return{
+    getFilesSrc: getFilesSrc,
+    setFilesSrc: setFilesSrc,
+    getFilesToUpload: getFilesToUpload,
+    setFilesToUpload: setFilesToUpload,
+    clearFilesSrc: clearFilesSrc,
+  }
+
+  var filesToUpload = [];
+  var filesSrc = [];
+
+  function getFilesToUpload(){
+    return this.filesToUpload;
+  }
+  function setFilesToUpload(filesToUpload){
+    this.filesToUpload = filesToUpload;
+  }
+
+  function getFilesSrc(){
+    return this.filesToUpload;
+  }
+  function setFilesSrc(filesSrc){
+    this.filesSrc = filesSrc;
+  }
+  function clearFilesSrc(filesSrc){
+    this.filesSrc = [];
+  }
+
+})

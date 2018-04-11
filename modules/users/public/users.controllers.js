@@ -315,13 +315,14 @@ angular.module('atwork.users')
         if (!$scope.selfProfile) {
           return true;
         }
+        console.log("avatar",$scope.avatar);
         var file = $scope.avatar.pop();
         $upload.upload({
           url: '/users/' + userId + '/avatar',
           file: file
         }).progress(function (evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-          console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+          //console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
         }).success(function (data, status, headers, config) {
           if (data && data.success) {
             $scope.profile.face = data.res.face;
