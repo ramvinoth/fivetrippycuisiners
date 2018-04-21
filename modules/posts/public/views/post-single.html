@@ -4,7 +4,7 @@
           <div class="aw-item-content" flex>
             <md-button class="md-accent md-old-style aw-person-name" href="/profile/{{item.creator.username}}">{{::item.creator.name}}</md-button>
             <p class="primaryColors aw-post-content" ng-bind-html="item.content | appPostFormat"></p>
-            <img ng-src="{{attach.url}}" ng-repeat="attach in item.attachments" class="preview-img" ng-show="attach.url"/>
+            <img ng-src="{{attach.url}}" ng-repeat="attach in item.attachments" class="preview-img" ng-show="attach.url" ng-click="imagePop($event, attach.url)"/>
             <div class="post-actions">
               <span class="likes primaryColors">
                 <a ng-if="!item.liked" class="like" ng-click="doLike(item)"><span class="fa fa-thumbs-o-up"></span> Like</a>
@@ -18,6 +18,10 @@
               <span ng-if="!item.commentEnabled" >-</span>
               <span class="view primaryColors">
                 <a href="/post/{{::item._id}}" class="view"><span>View</span></a>
+              </span>
+              <span>-</span>
+              <span class="view primaryColors">
+                <a ng-click="deleteItem(item)" class="view"><span>Delete</span></a>
               </span>
               <span ng-if="item.stream" >-</span>
               <span ng-if="item.stream" class="primaryColors">

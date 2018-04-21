@@ -7,6 +7,14 @@ module.exports = function(System) {
 
   var routes = [];
   
+  //Migration
+  routes.push({
+    method: 'post',
+    path: '/migration',
+    handler: streams.migration,
+    authorized: true
+  });
+  
   routes.push({
     method: 'post',
     path: '/',

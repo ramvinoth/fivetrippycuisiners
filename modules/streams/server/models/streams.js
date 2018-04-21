@@ -39,11 +39,6 @@ var StreamsSchema = new Schema({
     type: String,
     get: escapeProperty
   },
-  subscribers: [{
-    type: Schema.ObjectId,
-    required: false,
-    ref: 'User'
-  }]
 });
 
 /**

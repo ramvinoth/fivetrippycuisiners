@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Stream = mongoose.model('Stream');
 
 module.exports = function(System) {
+  var User = mongoose.model('User');
   var obj = {};
   var json = System.plugins.JSON;
   var event = System.plugins.event;
@@ -25,11 +26,23 @@ module.exports = function(System) {
   obj.create = function (req, res) {
     var stream = new Stream(req.body);
     stream.creator = req.user._id;
-    stream.subscribers.push(req.user._id);
+    var user = req.user;
 
     stream.save(function(err) {
+      user.subscribe(stream._id);
+      user.save(function(err) {
+        if (err) {
+          return json.unhappy(err, res);
+        }
+      });
       if (err) {
         return json.unhappy(err, res);
+      }else{
+        const fs = require('fs');
+        fs.mkdir('./public/uploads/'+stream.id, err => { 
+          if (err && err.code != 'EEXIST') throw 'up'
+            //res.file = "Folder created successfuly";
+          })
       }
       return json.happy(stream, res);
     });
@@ -71,23 +84,27 @@ module.exports = function(System) {
     var user = req.user;
 
     var criteria = {};
-
     /**
      * Do we want only subscribed streams?
      */
-    if (req.query.subscribed) {
+    /* no need to set this now
+     if (req.query.subscribed) {
       criteria.subscribers = req.user._id;
+    }
+    */
+    if (req.query.subscribed) {
+      criteria._id = {$in : user.streams};
     }
 
     /**
      * Do we want only unsubscribed streams?
      */
-    if (req.query.unsubscribed) {
-      criteria.subscribers = {$ne: req.user._id};
+     if (req.query.unsubscribed) {
+      criteria._id = {$nin: user.streams};
     }
 
     Stream.find(criteria, null, {sort: {title: 1}})
-    .populate('creator')
+    .populate('streams')
     .skip(parseInt(req.query.page) * System.config.settings.perPage)
     .limit(System.config.settings.perPage+1)
     .exec(function(err, streams) {
@@ -138,17 +155,16 @@ module.exports = function(System) {
    * @return {Void}
    */
   obj.subscribe = function (req, res) {
-    Stream.findOne({_id: req.params.streamId})
-    .populate('creator')
-    .exec(function(err, stream) {
+    User.findOne({_id: req.user._id})
+    .exec(function(err, user) {
       if (err) {
         return json.unhappy(err, res);
-      } else if (stream) {
+      } else if (user) {
         if (stream.subscribers.indexOf(req.user._id) !== -1) {
           return json.unhappy('You have already subscribers to the group', res);
         }
-        stream.subscribe(req.user._id);
-        stream.save(function(err, item) {
+        user.subscribe(req.params.streamId);
+        user.save(function(err, item) {
           if (err) {
             return json.unhappy(err, res);
           }
@@ -170,14 +186,13 @@ module.exports = function(System) {
    * @return {Void}
    */
   obj.unsubscribe = function (req, res) {
-    Stream.findOne({_id: req.params.streamId})
-    .populate('creator')
-    .exec(function(err, stream) {
+    User.findOne({_id: req.user._id})
+    .exec(function(err, user) {
       if (err) {
         return json.unhappy(err, res);
-      } else if (stream) {
-        if (stream.subscribers.indexOf(req.user._id) !== -1) {
-          stream.subscribers.splice(stream.subscribers.indexOf(req.user._id), 1);
+      } else if (user) {
+        if (user.subscribers.indexOf(req.params.streamId) !== -1) {
+          user.subscribers.splice(user.subscribers.indexOf(req.params.streamId), 1);
         } else {
           return json.unhappy('You have ubsubscribed', res);
         }
@@ -206,6 +221,41 @@ module.exports = function(System) {
   obj.remove = function (req, res) {
 
   };
+
+  obj.migration= function(req, res){
+
+    function toObjectId(ids) {
+      if (ids.constructor === Array) {
+        return ids.map(mongoose.Types.ObjectId);
+      }
+      return mongoose.Types.ObjectId(ids);
+    }
+    var criteria = {}
+    criteria.subscribers = req.user._id;
+    Stream.find(criteria)
+    .populate("creator")
+    .exec(function(err, streams){
+      if (err) {
+        return json.unhappy(err, res);
+      }
+
+      User.findOne(req.user._id)
+      .exec(function(err, user){
+        if(err){
+          return json.unhappy(err, res);
+        }
+        for(var i in streams){
+          user.subscribe(streams[i]._id);
+        }
+        user.save(function(err){
+          if(err){
+            return json.unhappy(err, res);
+          }
+        });
+
+      });
+    });
+  }
 
   return obj;
 };

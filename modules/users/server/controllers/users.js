@@ -109,7 +109,9 @@ module.exports = function(System) {
        * @type {String}
        */
       var domains = System.settings.domains;
-
+      //No need to check domain now
+      domains = false;
+      
       if (domains) {
         /**
          * Convert to array
@@ -478,8 +480,19 @@ module.exports = function(System) {
      * @type {String}
      */
     var filename = file.path.substr(file.path.lastIndexOf('/')+1);
+    var filepath = "profiles/"+filename; 
 
     var fs = require('fs');
+
+    var oldpath = "./public/uploads/"+filename;
+    var newpath = "./public/uploads/profiles/"+filename;
+    move(oldpath, newpath, function(err){
+      if(err){
+        return json.unhappy({message: 'Error in moving file.'}, res);
+      }
+    });
+    file.path = newpath;
+
     var AWS = require('aws-sdk');
     
     /**
@@ -517,7 +530,7 @@ module.exports = function(System) {
        * Update the user with the s3 path, even if its not yet uploaded
        * @type {String}
        */
-      user.face = 'https://s3.amazonaws.com/atwork/' + filename;
+      user.face = 'https://s3.amazonaws.com/atwork/' + filepath;
     }else{
 
       /**
@@ -531,7 +544,7 @@ module.exports = function(System) {
       }catch(e){
           console.log("Error",e);
       }
-      user.face = 'uploads/' + filename;
+      user.face = 'uploads/' + filepath;
     }
     user.save();
 
@@ -700,6 +713,37 @@ module.exports = function(System) {
       return json.happy({ items: items }, res);
     });
   };
+
+  //Have to move to a common function
+
+  function move(oldPath, newPath, callback) {
+    var fs = require('fs');
+    fs.rename(oldPath, newPath, function (err) {
+        if (err) {
+            if (err.code === 'EXDEV') {
+                copy();
+            } else {
+                callback(err);
+            }
+            return;
+        }
+        callback();
+    });
+
+    function copy() {
+        var readStream = fs.createReadStream(oldPath);
+        var writeStream = fs.createWriteStream(newPath);
+
+        readStream.on('error', callback);
+        writeStream.on('error', callback);
+
+        readStream.on('close', function () {
+            fs.unlink(oldPath, callback);
+        });
+
+        readStream.pipe(writeStream);
+    }
+  }
 
   return obj;
 };

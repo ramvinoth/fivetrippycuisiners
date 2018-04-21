@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var Post = mongoose.model('Post');
 var gallery = require("../../../galleries/server/models/gallery");
 var Gallery = mongoose.model("Gallery");
+var fs = require('fs');
+
 module.exports = function(System) {
   var obj = {};
   var json = System.plugins.JSON;
@@ -35,10 +37,11 @@ module.exports = function(System) {
    */
   obj.create = function(req, res) {
     var post = new Post(JSON.parse(req.body.data));
-    var gallery = obj.upload(req, res);
-    var gallery_id = gallery._id;
+    if(req.files.length > 0){
+      var gallery = obj.upload(req, res);
+      post.attachments.push(gallery._id);
+    }
     post.creator = req.user._id;
-    post.attachments.push(gallery_id);
     post.save(function(err) {
       post = post.afterSave(req.user);
 
@@ -86,6 +89,29 @@ module.exports = function(System) {
       return json.happy(post, res);
     });
   };
+
+  obj.delete = function(req, res) {
+    Post.findByIdAndRemove(req.params.postId, (err, post) => {  
+      if (err) return json.unhappy(err, res);
+      var attachments = post.attachments;
+      var streamId = post.stream;
+      for (var i = 0; i < attachments.length; i++) {
+        Gallery.findByIdAndRemove(attachments[i], (err, gallery) => {  
+          if (err) {
+            return json.unhappy(err, res);
+          }
+          if(gallery.url !== "" && gallery.url !== undefined){
+            try{
+              fs.unlinkSync("./public/"+gallery.url);
+            }catch(ex){
+              console.log("File not exist");
+            }
+          } 
+        });
+      }
+      return json.happy({message: 'Post deleted successfuly'}, res);
+    });
+  }
 
   /**
    * Create a new comment
@@ -307,6 +333,7 @@ module.exports = function(System) {
       _id: req.params.postId
     })
     .populate('creator')
+    .populate('attachments')
     .populate('comments')
     .populate('comments.creator')
     .populate('stream')
@@ -459,6 +486,8 @@ module.exports = function(System) {
    */
   obj.upload = function(req, res) {
     var gallery = new Gallery();
+    var reqBody = JSON.parse(req.body.data);
+    var streamId = reqBody.stream;
     var user = req.user;
     var file = req.files[0];
     var file_extension = file.mimetype.replace('image/','');
@@ -474,8 +503,20 @@ module.exports = function(System) {
      * @type {String}
      */
     var filename = file.path.substr(file.path.lastIndexOf('/')+1);
-
-    var fs = require('fs');
+    var filepath = filename;
+    if(streamId && streamId !== ""){
+      filepath = streamId+"/"+filename;
+      var oldpath = "./public/uploads/"+filename;
+      var newpath = "./public/uploads/"+streamId+"/"+filename;
+      move(oldpath, newpath, function(err){
+        if(err){
+          return json.unhappy({message: 'Error in moving file.'}, res);
+        }
+      });
+      file.path = newpath;
+      gallery.stream = streamId;
+    }
+    
     var AWS = require('aws-sdk');
     
     /**
@@ -513,7 +554,7 @@ module.exports = function(System) {
        * Update the user with the s3 path, even if its not yet uploaded
        * @type {String}
        */
-      gallery.url = 'https://s3.amazonaws.com/atwork/' + filename;
+      gallery.url = 'https://s3.amazonaws.com/atwork/' + filepath;
     }else{
 
       /**
@@ -527,7 +568,7 @@ module.exports = function(System) {
       }catch(e){
           console.log("Error",e);
       }
-      gallery.url = 'uploads/' + filename;
+      gallery.url = 'uploads/' + filepath;
     }
 
     gallery.creator = user;
@@ -540,7 +581,34 @@ module.exports = function(System) {
     return gallery;
 
   };
+  function move(oldPath, newPath, callback) {
 
+    fs.rename(oldPath, newPath, function (err) {
+        if (err) {
+            if (err.code === 'EXDEV') {
+                copy();
+            } else {
+                callback(err);
+            }
+            return;
+        }
+        callback();
+    });
+
+    function copy() {
+        var readStream = fs.createReadStream(oldPath);
+        var writeStream = fs.createWriteStream(newPath);
+
+        readStream.on('error', callback);
+        writeStream.on('error', callback);
+
+        readStream.on('close', function () {
+            fs.unlink(oldPath, callback);
+        });
+
+        readStream.pipe(writeStream);
+    }
+  }
 
   return obj;
 };

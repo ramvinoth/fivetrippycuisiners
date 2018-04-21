@@ -45,6 +45,24 @@ angular.module('atwork.galleries')
 
         $scope.imageUpload = function(event){
             var files = event.target.files; //FileList object
+
+            var allowed = ["jpeg", "png", "gif", "jpg"];
+            var found = false;
+            var img;
+            img = new Image();
+
+            allowed.forEach(function(extension) {
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    if (file.type.match('image/'+extension)) {
+                        found = true;
+                    }
+                }
+            });
+            if(!found){
+                alert('file type should be .jpeg, .png, .jpg, .gif');
+                return;
+            }
             UploadService.setFilesToUpload(files);
 
             for (var i = 0; i < files.length; i++) {
@@ -61,5 +79,32 @@ angular.module('atwork.galleries')
                 UploadService.setFilesSrc($rootScope.filesSrc);
             });
         }
+
+
+        /**
+         * Show image in Pop
+         * @param  {Boolean} isValid Will be true if form validation passes
+         * @return {Void}
+         */
+        $scope.imagePop = function($ev, imageUrl){
+            appGalleryPop.showImagePop($ev, imageUrl);
+        }
+
         }
     ]);
+
+    angular.module('imageResizer', ['imageupload'])
+
+.config(['$compileProvider', function($compileProvider) {   
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|data|blob|chrome-extension):/);
+    $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|data|blob|chrome-extension):/);
+}])
+
+.controller('AppCtrl', ['$scope', function($scope) {
+	$scope.config = {
+		width: 600,
+		height: 600,
+		quality: 1
+	};
+}]);
+

@@ -34,6 +34,13 @@ module.exports = function(System) {
     handler: posts.streamPosts,
     authorized: true
   });
+  
+  routes.push({
+    method: 'delete',
+    path: '/:postId/delete',
+    handler: posts.delete,
+    authorized: true
+  });
 
   routes.push({
     method: 'get',

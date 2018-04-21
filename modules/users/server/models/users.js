@@ -99,6 +99,11 @@ var UserSchema = new Schema({
     required: true,
     ref: 'User'
   }],
+  streams: [{
+    type: Schema.ObjectId,
+    required: false,
+    ref: 'Stream'
+  }],
   socketId: {
     type: String,
     default: ''
@@ -150,6 +155,8 @@ var UserSchema = new Schema({
     type: Boolean,
     default: false
   }
+},{
+  usePushEach: true,
 });
 
 /**
@@ -404,7 +411,15 @@ UserSchema.methods = {
     delete obj.token;
     delete obj.following;
     return obj;
-  }
+  },
+
+  /*Subscribe to Streams*/
+
+  subscribe: function(streamId) {
+    if (this.streams.indexOf(streamId) === -1 && this._id !== streamId) { //cannot subscribe to own post
+      this.streams.push(streamId);
+    }
+  },
 };
 
 mongoose.model('User', UserSchema);

@@ -18,7 +18,8 @@ angular.module('atwork.posts')
     'appPostsFeed',
     'resolvedFeeds',
     'UploadService',
-    function($scope, $route, $rootScope, $routeParams, $timeout, $upload, appPosts, appAuth, appToast, appStorage, appLocation, appWebSocket, appUsersSearch, appPostsFeed, resolvedFeeds, UploadService) {
+    'PopUpService',
+    function($scope, $route, $rootScope, $routeParams, $timeout, $upload, appPosts, appAuth, appToast, appStorage, appLocation, appWebSocket, appUsersSearch, appPostsFeed, resolvedFeeds, UploadService, PopUpService) {
       $scope.content = '';
       $scope.lastUpdated = 0;
       $scope.postForm = '';
@@ -279,7 +280,10 @@ angular.module('atwork.posts')
       $scope.create = function(isValid, item) {
         if (isValid) {
           var files = UploadService.getFilesToUpload();
-          console.log("files", files);
+          var file;
+          if(files && files.length > 0){
+            file = files[0];
+          }
           var data = {
             content: this.content,
             stream: streamId,
@@ -289,7 +293,7 @@ angular.module('atwork.posts')
           $upload.upload({
             url: '/posts/',
             arrayKey: '',
-            file: files[0],
+            file: file,
             data: data
           }).progress(function (evt) {
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
@@ -321,7 +325,10 @@ angular.module('atwork.posts')
           
         }
       };
-
+      $scope.imagePop = function($ev, imageUrl){
+        console.log("controller initiated");
+        PopUpService.imagePop($ev, imageUrl);    
+      };
       
     }
   ])

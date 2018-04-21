@@ -22,6 +22,10 @@ angular.module('atwork.posts')
             likes: {
               method: 'GET',
               params: {action: 'likes'}
+            },
+            delete: {
+              method: 'DELETE',
+              params: {action: 'delete'}
             }
           }),
         feed: $resource('posts/'),
@@ -257,8 +261,9 @@ angular.module('atwork.posts')
     'appPosts',
     'appWebSocket',
     'appAuth',
+    'appToast',
     'appDialog',
-    function(appPosts, appWebSocket, appAuth, appDialog) {
+    function(appPosts, appWebSocket, appAuth, appToast, appDialog) {
       return {
         templateUrl: '/modules/posts/views/post-single.html',
         controller: [
@@ -316,6 +321,26 @@ angular.module('atwork.posts')
                 
               }
             };
+
+            /**
+             * Delete the post
+             * @param  {Id} item The item id
+             * @return {Void}      
+             */
+
+            $scope.deleteItem = function(item){
+              appPosts.single.delete({
+                postId: item._id
+              }, function(response) {
+                if(response.success == 1){
+                  var myEl = angular.element( document.querySelector( '[id="'+item._id+'"]' ) );
+                  myEl.remove();
+                  appToast(response.res.message);
+                }else{
+                  alert("Error in deleting the post");
+                }
+              });
+            }
 
             /**
              * Show the list of likers for a specific post

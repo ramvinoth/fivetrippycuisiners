@@ -17,8 +17,8 @@
       <!-- new deployment: 25, May, 2015!! -->
       <div class="preloader" ng-if="!appReady">
         <div class="preloader-content">
-          <img src="images/preloader.gif" width="300">
-          <h1>Flying</h1>
+          <img src="images/logo.png" width="300">
+          <h1>Tamizha</h1>
           <p>Hold on, tightly...</p>
         </div>
       </div>
@@ -27,7 +27,8 @@
           <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn" ng-if="isLoggedIn">
             <span class="visuallyhidden">Menu</span>
           </button>
-          <h1>{{systemSettings ? systemSettings.workplace : 'AtWork'}}</h1>
+          <span><img src="images/logo.png" width="50px" height="auto"/></span>
+          <h1>{{systemSettings ? systemSettings.workplace : 'Tamizha'}}</h1>
         </md-toolbar>
         <div class="md-padding sidebar-list" layout-padding>
             <div ng-include="'/system/public/views/search.html'"></div>

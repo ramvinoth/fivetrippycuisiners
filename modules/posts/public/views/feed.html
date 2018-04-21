@@ -28,7 +28,7 @@
           <div ng-controller="GalleryCtrl">
             <input type="file" ng-file-select ng-accept="'image/*'" fileinput="file" ng-model-instant onchange="angular.element(this).scope().imageUpload(event)">
             <div class="col-md-6">
-              <img ng-src="{{filesrc}}" ng-repeat="filesrc in filesSrc" class="img-responsive preview-img" ng-show="filesrc" ng-model="filesSrc"/>
+              <img ng-src="{{filesrc}}" ng-repeat="filesrc in filesSrc" class="img-responsive preview-img" ng-show="filesrc" ng-model="filesSrc" ng-click="imagePop($event, filesSrc)"/>
             </div>
           </div>
           <md-button class="md-primary md-raised">
@@ -74,7 +74,7 @@
         </md-card>
         
         <p ng-if="!lastUpdated">Loading...</p>
-        <md-item ng-repeat="item in feed">
+        <md-item ng-repeat="item in feed" id="{{::item._id}}">
           <div ng-if="item.spacer" class="feed-spacer">
             Loaded more below
           </div>

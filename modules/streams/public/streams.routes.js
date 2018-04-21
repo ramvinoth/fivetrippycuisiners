@@ -3,6 +3,21 @@
 angular.module('atwork.streams')
   .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProvider
+      .when('/stream/migration', {
+        resolve: {
+          resolvedFeeds: [
+            '$route',
+            '$resource',
+            function($route, $resource){
+              console.log("aaaaa");
+              var migration = $resource('/streams/migration');
+              migration.save({}, function(){
+                console.log("trueeee");
+              });
+            }
+          ]
+        }
+      })
       .when('/stream/:streamId', {
         templateUrl: '/modules/posts/views/feed.html',
         controller: 'PostsCtrl',
