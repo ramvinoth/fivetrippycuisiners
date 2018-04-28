@@ -79,7 +79,7 @@ function startServer() {
     var host = server.address().address
     var port = server.address().port
 
-    console.log('AtWork running at http://%s:%s', host, port);
+    console.log('Tamizhans App running at http://%s:%s', host, port);
   });
 }
 
