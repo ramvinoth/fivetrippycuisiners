@@ -305,6 +305,7 @@ angular.module('atwork.posts')
                * We are the creator ourselves, we know that
                * @type {Object}
                */
+
               response.res = angular.extend(response.res, {
                 creator: appAuth.getUser()
               });
@@ -326,10 +327,14 @@ angular.module('atwork.posts')
         }
       };
       $scope.imagePop = function($ev, imageUrl){
-        console.log("controller initiated");
         PopUpService.imagePop($ev, imageUrl);    
       };
       
+      function isFeedLatestImgLoaded() {
+        imgElement = angular.element("img[class='preview-img']")[0];
+        return imgElement.complete && imgElement.naturalHeight !== 0;
+      }
+
     }
   ])
   ;

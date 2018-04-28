@@ -40,6 +40,7 @@ module.exports = function(System) {
     if(req.files.length > 0){
       var gallery = obj.upload(req, res);
       post.attachments.push(gallery._id);
+      //post.attachments[0].url = 'uploads/' + gallery.filepath;
     }
     post.creator = req.user._id;
     post.save(function(err) {
@@ -102,11 +103,15 @@ module.exports = function(System) {
           }
           if(gallery.url !== "" && gallery.url !== undefined){
             try{
-              fs.unlinkSync("./public/"+gallery.url);
+              stream_id = gallery.stream? gallery.stream.id: 0;
+              obj.deleteImgFromPHPServer(gallery.id, stream_id);
+              if(gallery.url.indexOf("http://") == -1){
+                fs.unlinkSync("./public/"+gallery.url);
+              }
             }catch(ex){
-              console.log("File not exist");
+              console.log("File not exist with exception", ex);
             }
-          } 
+          }
         });
       }
       return json.happy({message: 'Post deleted successfuly'}, res);
@@ -369,7 +374,7 @@ module.exports = function(System) {
             });
           }
         }
-
+        
         return json.happy({
           record: post
         }, res);
@@ -505,6 +510,7 @@ module.exports = function(System) {
     var filename = file.path.substr(file.path.lastIndexOf('/')+1);
     var filepath = filename;
     if(streamId && streamId !== ""){
+      /*
       filepath = streamId+"/"+filename;
       var oldpath = "./public/uploads/"+filename;
       var newpath = "./public/uploads/"+streamId+"/"+filename;
@@ -514,9 +520,12 @@ module.exports = function(System) {
         }
       });
       file.path = newpath;
+      */
       gallery.stream = streamId;
     }
-    
+    if(System.config.IMG_STATIC !== ""){
+      obj.sendToPHPServer(file, gallery.id, streamId);
+    }
     var AWS = require('aws-sdk');
     
     /**
@@ -568,7 +577,11 @@ module.exports = function(System) {
       }catch(e){
           console.log("Error",e);
       }
-      gallery.url = 'uploads/' + filepath;
+      if(System.config.IMG_STATIC !== ""){
+        gallery.url = System.config.IMG_STATIC_URL+'?image_id=' + gallery.id;
+      }else{
+        gallery.url = "uploads/"+filepath;
+      }
     }
 
     gallery.creator = user;
@@ -609,6 +622,80 @@ module.exports = function(System) {
         readStream.pipe(writeStream);
     }
   }
+
+  obj.sendToPHPServer = function(file, image_id, stream_id){
+    var request = require('request');
+    if(!stream_id){
+      stream_id = 0;
+    }
+    var formData = {
+      image: {
+        value: fs.createReadStream(file.path),
+        options: {
+          filename: file.originalname,
+          contentType: file.mimeType
+        }
+      },
+      'image_id': image_id,
+      'stream_id': stream_id,
+    };
+    var uploadOptions = {
+        "url": System.config.IMG_STATIC+"/upload.php",
+        "method": "POST",
+        "headers": {
+            //"Authorization": "Bearer " + accessToken
+        },
+        "formData": formData
+    }
+    var req = request(uploadOptions, function(err, resp, body) {
+        try{
+          body = JSON.parse(body);
+        }catch(ex){
+          console.log('Not a JSON string ', ex);
+        }
+        if (err) {
+            console.log('Error ', err);
+            return err;
+        } else {
+            console.log('upload successful', JSON.stringify(body));
+            return body;
+        }
+    });
+  };
+
+  obj.deleteImgFromPHPServer= function(image_id, stream_id){
+    var request = require('request');
+    if(!stream_id){
+      stream_id = 0;
+    }
+    var params = {
+      "image_id": image_id,
+      "stream_id": stream_id,
+    }
+    var options = {
+        "url": System.config.IMG_STATIC+"/delete.php",
+        "method": "POST",
+        "headers": {
+            //"Authorization": "Bearer " + accessToken
+        },
+        "formData": params,
+    }
+    var req = request(options, function(err, resp, body) {
+        try{
+          body = JSON.parse(body);
+        }catch(ex){
+          console.log(ex);
+          return "Unable to communicate image server: JOSN Body parse error";
+        }
+        if (err) {
+            console.log('Error ', err);
+            return err;
+        } else {
+            console.log('deleted successful', JSON.stringify(body));
+            return body;
+        }
+    });
+  };
 
   return obj;
 };

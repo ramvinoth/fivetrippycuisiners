@@ -2,6 +2,8 @@
 
 module.exports = {
   REQUESTS_DELAY: 0,
+  IMG_STATIC: 'http://www.tamizhans.in',
+  IMG_STATIC_URL: 'http://www.tamizhans.in/image.php',
   REQUESTS_DELAY_SYSTEM: 0,
   baseURL: (process.env.BASEURL || 'https://fivetrippycuisiners.herokuapp.com'),
   db: 'mongodb://viyabiz_vinz:viyaSmart$6@ds261078.mlab.com:61078/trippycuisiners',

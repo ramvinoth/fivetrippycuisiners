@@ -465,6 +465,7 @@ module.exports = function(System) {
    * @return {Void}     
    */
   obj.avatar = function(req, res) {
+    ImageHelperUtil = System.plugins["Image"];
     var user = req.user;
     var file = req.files[0];
     var file_extension = file.mimetype.replace('image/','');
@@ -480,10 +481,11 @@ module.exports = function(System) {
      * @type {String}
      */
     var filename = file.path.substr(file.path.lastIndexOf('/')+1);
-    var filepath = "profiles/"+filename; 
+    var filepath = filename; 
 
     var fs = require('fs');
-
+    
+    /*
     var oldpath = "./public/uploads/"+filename;
     var newpath = "./public/uploads/profiles/"+filename;
     move(oldpath, newpath, function(err){
@@ -492,6 +494,11 @@ module.exports = function(System) {
       }
     });
     file.path = newpath;
+    */
+
+    if(System.config.IMG_STATIC !== ""){
+      ImageHelperUtil.sendToPHPServer(file, user.id);
+    }
 
     var AWS = require('aws-sdk');
     
@@ -539,12 +546,20 @@ module.exports = function(System) {
        */
       try{
         if(user.face !== "" && user.face !== undefined){
-          fs.unlinkSync("./public/"+user.face);
+          if(user.face.indexOf("tamizhans.in") == -1){
+            fs.unlinkSync("./public/"+user.face);
+          }else{
+            ImageHelperUtil.deleteImgFromPHPServer(user.id, 0);
+          }
         } 
       }catch(e){
           console.log("Error",e);
       }
-      user.face = 'uploads/' + filepath;
+      if(System.config.IMG_STATIC == ""){
+        user.face = 'uploads/' + filepath;
+      }else{
+        user.face = System.config.IMG_STATIC_URL+'?image_id=' + user.id;
+      }
     }
     user.save();
 

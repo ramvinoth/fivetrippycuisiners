@@ -101,7 +101,7 @@ angular.module('atwork.posts')
           var postId = options.postId;
           var streamId = options.streamId;
           var passedData = options.passedData;
-
+          
           /**
            * Configuration for the service
            * that will also be returned

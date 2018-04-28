@@ -160,7 +160,7 @@ module.exports = function(System) {
       if (err) {
         return json.unhappy(err, res);
       } else if (user) {
-        if (stream.subscribers.indexOf(req.user._id) !== -1) {
+        if (user.streams.indexOf(req.params.streamId) !== -1) {
           return json.unhappy('You have already subscribers to the group', res);
         }
         user.subscribe(req.params.streamId);
@@ -191,13 +191,13 @@ module.exports = function(System) {
       if (err) {
         return json.unhappy(err, res);
       } else if (user) {
-        if (user.subscribers.indexOf(req.params.streamId) !== -1) {
-          user.subscribers.splice(user.subscribers.indexOf(req.params.streamId), 1);
+        if (user.streams.indexOf(req.params.streamId) !== -1) {
+          user.streams.splice(user.streams.indexOf(req.params.streamId), 1);
         } else {
           return json.unhappy('You have ubsubscribed', res);
         }
         
-        stream.save(function(err, item) {
+        user.save(function(err, item) {
           if (err) {
             return json.unhappy(err, res);
           }

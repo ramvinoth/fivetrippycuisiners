@@ -2,6 +2,8 @@
 console.log('Config in development');
 module.exports = {
   REQUESTS_DELAY: 0,
+  IMG_STATIC: 'http://www.tamizhans.in',
+  IMG_STATIC_URL: 'http://www.tamizhans.in/image.php',
   REQUESTS_DELAY_SYSTEM: 0,
   baseURL: 'http://localhost:8181',
   db: process.env.MONGOHQ_URL || 'mongodb://' + (process.env.DB_PORT_27017_TCP_ADDR || 'localhost') + '/trippycuisiners',
