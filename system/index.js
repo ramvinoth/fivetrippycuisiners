@@ -125,6 +125,9 @@ function loadSettings(System, cb) {
     });
     System.mailer = nodemailer.createTransport({
       service: Config.settings.email.service,
+      host: 'thaco.websitewelcome.com',
+      port: 465,
+      secure: true, // use SSL
       auth: {
         user: System.settings.email,
         pass: System.settings.emailPassword
