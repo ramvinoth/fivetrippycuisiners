@@ -15,7 +15,7 @@ module.exports = {
   settings: {
   	perPage: 10,
   	email: {
-  		service: 'Gmail'
+  		service: 'thaco.websitewelcome.com'
   	}
   },
   aws: {
