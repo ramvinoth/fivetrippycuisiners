@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var Stream = mongoose.model('Stream');
 var jwt = require('jsonwebtoken');
 
 module.exports = function(System) {
@@ -251,6 +252,26 @@ module.exports = function(System) {
               record: user,
               token: user.token
             }, res);
+            try{
+              if(user.streams.length < 1){
+                var streamArr = []
+                Stream.find({}, function(err, streams){
+                  streams.forEach(function(stream){
+                    streamArr.push(stream._id);
+                  });
+                  user.streams = streamArr;
+                  user.save(function(err) {
+                    if (err) {
+                      console.log("Error in stream update on login : ",err);
+                    }else{
+                      console.log("Stream update successfull on login : ");
+                    }
+                  });
+                })
+              }
+            }catch(ex){
+              console.log("Exception in subscribing streams to user on new login", ex);
+            }
           } else {
             json.unhappy({
               message: 'Incorrect email/password'

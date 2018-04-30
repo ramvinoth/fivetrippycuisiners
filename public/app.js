@@ -39,7 +39,7 @@ app.controller('AppCtrl', [
       $rootScope.currUserId = $scope.user._id;
       $rootScope.currUserRoles = $scope.user.roles;
       $rootScope.currUserDesig = $scope.user.designation? $scope.user.designation : "user";
-      $rootScope.isAdmin = (appAuth.getUser().roles.indexOf('admin') !== -1);
+      $rootScope.isAdmin = appAuth.getUser().roles?(appAuth.getUser().roles.indexOf('admin') !== -1): false;
     };
 
     $scope.goHome = function() {
