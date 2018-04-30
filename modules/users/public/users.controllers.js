@@ -130,6 +130,7 @@ angular.module('atwork.users')
     'appLocation',
     function($scope, $routeParams, $location, $timeout, $upload, appUsers, appAuth, appToast, appPosts, profileData, resolvedFeeds, appPostsFeed, appLocation) {
       var userId = $routeParams.userId || appAuth.getUser()._id;
+      $scope.currUserId = appAuth.getUser()._id;
 
       /**
        * Cannot follow self

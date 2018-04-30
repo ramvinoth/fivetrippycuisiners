@@ -32,11 +32,14 @@ angular.module('atwork.posts')
       $scope.mentionsResults = [];
       $scope.filesToUpload = UploadService.getFilesToUpload;
 
+      $scope.currUserId = appAuth.getUser()._id;
+      $scope.currUserRole = appAuth.getUser().designation;
+
       var hashtag = $routeParams.hashtag;
       var userId = $scope.timelinePage = $routeParams.userId;
       var postId = $scope.detailPage = $routeParams.postId;
       var streamId = $scope.streamPage = $routeParams.streamId;
-
+      
       if (hashtag) {
         $scope.feedsFilter = '#' + hashtag;
       }

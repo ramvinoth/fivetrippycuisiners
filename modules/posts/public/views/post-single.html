@@ -19,10 +19,11 @@
               <span class="view primaryColors">
                 <a href="/post/{{::item._id}}" class="view"><span>View</span></a>
               </span>
-              <span>-</span>
-              <span class="view primaryColors">
+              <span ng-if="item.creator._id === currUserId">-</span>
+              <span class="view primaryColors" ng-if="item.creator._id === currUserId">
                 <a ng-click="deleteItem(item)" class="view"><span>Delete</span></a>
               </span>
+              
               <span ng-if="item.stream" >-</span>
               <span ng-if="item.stream" class="primaryColors">
                 <a href="/stream/{{::item.stream._id}}" class="stream"><span>$ {{item.stream.title}}</span></a>

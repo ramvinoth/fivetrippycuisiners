@@ -92,29 +92,39 @@ module.exports = function(System) {
   };
 
   obj.delete = function(req, res) {
-    Post.findByIdAndRemove(req.params.postId, (err, post) => {  
-      if (err) return json.unhappy(err, res);
-      var attachments = post.attachments;
-      var streamId = post.stream;
-      for (var i = 0; i < attachments.length; i++) {
-        Gallery.findByIdAndRemove(attachments[i], (err, gallery) => {  
-          if (err) {
-            return json.unhappy(err, res);
-          }
-          if(gallery.url !== "" && gallery.url !== undefined){
-            try{
-              stream_id = gallery.stream? gallery.stream.id: 0;
-              obj.deleteImgFromPHPServer(gallery.id, stream_id);
-              if(gallery.url.indexOf("http://") == -1){
-                fs.unlinkSync("./public/"+gallery.url);
+    Post.findOne({ _id: req.params.postId })
+    .populate('creator')
+    .exec(function(err, post) {
+      if(req.user.id == post.creator.id || req.user.designation == "admin"){ 
+        Post.findByIdAndRemove(req.params.postId, (err, post) => {  
+          if (err) return json.unhappy(err, res);
+          var attachments = post.attachments;
+          var streamId = post.stream;
+          for (var i = 0; i < attachments.length; i++) {
+            Gallery.findByIdAndRemove(attachments[i], (err, gallery) => {  
+              if (err) {
+                return json.unhappy(err, res);
               }
-            }catch(ex){
-              console.log("File not exist with exception", ex);
-            }
+              if(gallery.url !== "" && gallery.url !== undefined){
+                try{
+                  stream_id = gallery.stream? gallery.stream.id: 0;
+                  obj.deleteImgFromPHPServer(gallery.id, stream_id);
+                  if(gallery.url.indexOf("http://") == -1){
+                    fs.unlinkSync("./public/"+gallery.url);
+                  }
+                }catch(ex){
+                  console.log("File not exist with exception", ex);
+                }
+              }
+            });
           }
+          return json.happy({message: 'Post deleted successfuly'}, res);
         });
+      }else{
+        err = err? err : {};
+        err.message = "You don't have permission to perform this action" 
+        return json.unhappy(err, res);
       }
-      return json.happy({message: 'Post deleted successfuly'}, res);
     });
   }
 
