@@ -15,7 +15,7 @@
             </div>
         </li>
         <li>
-            <form name="newStreamForm" ng-submit="create(newStreamForm.$valid)" novalidate>
+            <form name="newStreamForm" ng-submit="create(newStreamForm.$valid)" ng-if="isAdmin" novalidate>
                 <md-input-container ng-show="actions.createNew">
                     <label>+ New Stream</label>
                     <input type="text" name="newStreamName" ng-model="newStreamName" required set-focus="actions.createNew">
@@ -25,7 +25,7 @@
                     </div>
                 </md-input-container>
             </form>
-            <md-button class="no-case no-bold md-primary" ng-hide="actions.createNew" ng-click="createNew()">
+            <md-button class="no-case no-bold md-primary" ng-hide="actions.createNew" ng-click="createNew()" ng-if="isAdmin" >
                 + Create New
             </md-button>
             <br>

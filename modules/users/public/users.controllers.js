@@ -553,7 +553,11 @@ angular.module('atwork.users')
           auth.$save(function(response) {
             if (response.success) {
               appToast('You are now logged in.');
-              $scope.postLogin(response.res.record, response.res.token);
+              var record = response.res.record;
+              $scope.postLogin(record, response.res.token);
+              $rootScope.currUserId = record._id;
+              $rootScope.currUserRoles = record.roles;
+              $rootScope.currUserDesig = record.designation? record.designation : "user";
             } else {
               appToast(response.res.message);
             }

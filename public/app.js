@@ -36,6 +36,10 @@ app.controller('AppCtrl', [
     $scope.updateLoginStatus = function() {
       $scope.isLoggedIn = appAuth.isLoggedIn();
       $scope.user = appAuth.getUser();
+      $rootScope.currUserId = $scope.user._id;
+      $rootScope.currUserRoles = $scope.user.roles;
+      $rootScope.currUserDesig = $scope.user.designation? $scope.user.designation : "user";
+      $rootScope.isAdmin = (appAuth.getUser().roles.indexOf('admin') !== -1);
     };
 
     $scope.goHome = function() {
