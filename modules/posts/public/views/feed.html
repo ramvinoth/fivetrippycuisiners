@@ -18,7 +18,7 @@
         <form name="postForm" ng-submit="create(postForm.$valid)" novalidate>
           <md-input-container>
             <label>What do you want to share?</label>
-            <textarea ng-change="checkMentions(content, '#status')" name="content" ng-model="content" id="status" cols="30" rows="2" required md-maxlength="255" minlength="3"></textarea>
+            <textarea ng-change="checkMentions(content, '#status')" name="content" ng-model="content" id="status" cols="30" rows="2" required md-maxlength="2055" minlength="2"></textarea>
             <div ng-messages="postForm.content.$error" ng-show="postForm.$submitted">
               <div ng-message="required">Write your post first.</div>
               <div ng-message="md-maxlength">That's too long!</div>

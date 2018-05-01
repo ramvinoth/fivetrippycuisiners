@@ -47,7 +47,9 @@ angular.module('atwork.posts')
         text = text.replace(mentions, function(mention) {
           return '<a href="/profile/'+ mention.replace('@', '') +'">' + mention + '</a>'
         });
-        
+
+        text = text.replace(new RegExp('\r?\n','g'), '<br />');
+        console.log("text : ", text);
         /**
          * Emoticons
          */
