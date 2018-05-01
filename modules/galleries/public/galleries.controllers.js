@@ -75,6 +75,7 @@ angular.module('atwork.galleries')
 
         $scope.imageIsLoaded = function(e){
             $scope.$apply(function() {
+                $rootScope.filesSrc = []; //Added for single image, should be removed after supporting for multiple upload
                 $rootScope.filesSrc.push(e.target.result);
                 UploadService.setFilesSrc($rootScope.filesSrc);
             });

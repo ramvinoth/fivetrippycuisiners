@@ -11,13 +11,9 @@
           gtag('config', 'UA-99087345-4');
         </script>
 
-        <meta name="description" content="Taking TN to the next level. First ever social network for Tamizhans" />
-        <meta name="image" content="http://www.tamizhans.com/images/logo.jpg">
-        <meta name="keywords" content="tamil" />
-
-        <meta property="og:title" content="First ever social network for Tamizhans">
+        <meta property="og:title" content="{{ngMeta.title}}">
         <meta property="og:image" content="http://www.tamizhans.com/images/logo.jpg">
-        <meta property="og:description" content="Taking TN to the next level.">
+        <meta property="og:description" content="{{ngMeta.description}}">
         <meta property="og:url" content="http://www.tamizhans.com/">
 
         <link rel="SHORTCUT ICON" href="/images/tamizhans.ico" />
@@ -40,6 +36,7 @@
           <img src="images/logo.png" width="300">
           <h1>Tamizha</h1>
           <p>Hold on, tightly...</p>
+          <p>Taking TN to the next level.</p>
         </div>
       </div>
       <md-sidenav layout="column" class="site-sidenav md-sidenav-left md-whiteframe-z2" md-component-id="left" ng-if="isLoggedIn">
@@ -149,6 +146,7 @@
 
       <script src='/bower_components/summernote/dist/summernote.min.js'></script>
       <script src='/bower_components/angular-summernote/dist/angular-summernote.min.js'></script>
+      <script src='/bower_components/ngMeta/dist/ngMeta.min.js'></script>
       
       <!-- Non-critical CSS -->
       <link rel="stylesheet" href="/bower_components/fontawesome/css/font-awesome.min.css">

@@ -253,7 +253,7 @@ module.exports = function(System) {
               token: user.token
             }, res);
             try{
-              if(user.streams.length < 1){
+              if(user.streams.length < 3){
                 var streamArr = []
                 Stream.find({}, function(err, streams){
                   streams.forEach(function(stream){

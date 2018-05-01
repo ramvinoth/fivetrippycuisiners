@@ -1,3 +1,4 @@
+@charset "UTF-8";
 html, body {
   font-size: 14px;
   color: #444;
@@ -721,6 +722,10 @@ md-item-content {
   width: auto;
   height: 100%; }
 
+.img-hauto {
+  width: 100%;
+  height: auto; }
+
 *:focus {
   outline: none !important;
   border: 0 !important; }
@@ -729,3 +734,38 @@ md-item-content {
   overflow: hidden !important;
   white-space: nowrap !important;
   text-overflow: ellipsis !important; }
+
+/*Block quote design STARTS */
+blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "“" "”" "‘" "’"; }
+
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em; }
+
+blockquote p {
+  display: inline; }
+
+blockquote.style2 {
+  font: 14px/22px normal helvetica, sans-serif;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 50px;
+  padding-left: 15px;
+  border-left: 3px solid #ccc; }
+
+.login-display .display-content {
+  position: relative;
+  display: block;
+  float: left; }
+
+.inline-block {
+  display: inline-block; }
