@@ -36,7 +36,8 @@ angular.module('atwork.posts')
   ])
   .filter('appPostFormat', [
     '$sce',
-    function($sce) {
+    'appPostsFeed',
+    function($sce, appPostsFeed) {
       return function(text) {
         var hashtags = new RegExp('#([A-Za-z0-9]+)', 'g');
         text = text.replace(hashtags, function(hashtag) {
@@ -49,7 +50,7 @@ angular.module('atwork.posts')
         });
 
         text = text.replace(new RegExp('\r?\n','g'), '<br />');
-        console.log("text : ", text);
+        
         /**
          * Emoticons
          */
@@ -88,6 +89,13 @@ angular.module('atwork.posts')
           text = text.replace(key, emotTemplate.replace('{{emoticon}}', value));
         };
         
+        var videoId = appPostsFeed.getVideoId(text);
+        if(videoId !== 'error'){
+          var iframeMarkup = '<iframe width="560" height="315" src="//www.youtube.com/embed/' + videoId + '" frameborder="0" allowfullscreen></iframe>';
+          text = text+"<br>"+iframeMarkup;
+        }
+        text = text.replace(/(\b(https?|ftp|file):\/\/[\-A-Z0-9+&@#\/%?=~_|!:,.;]*[\-A-Z09+&@#\/%=~_|])/img, '<a href="$1" target="_blank">$1</a>');
+
         return $sce.trustAsHtml(text);
       };
     }
@@ -255,7 +263,19 @@ angular.module('atwork.posts')
             cb(data);
           }
 
-        }
+        },
+        getVideoId: function(url){
+          var ID = '';
+          url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+          if(url[2] !== undefined) {
+            ID = url[2].split(/[^0-9a-z_\-]/i);
+            ID = ID[0];
+          }
+          else {
+            ID = url;
+          }
+            return ID;
+        },
       }
     }
   ])
