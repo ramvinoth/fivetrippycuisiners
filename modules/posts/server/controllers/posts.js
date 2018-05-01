@@ -95,7 +95,7 @@ module.exports = function(System) {
     Post.findOne({ _id: req.params.postId })
     .populate('creator')
     .exec(function(err, post) {
-      if(req.user.id == post.creator.id || req.user.designation == "admin"){ 
+      if(req.user.id == post.creator.id || req.user.designation == "Admin"){ 
         Post.findByIdAndRemove(req.params.postId, (err, post) => {  
           if (err) return json.unhappy(err, res);
           var attachments = post.attachments;
