@@ -9,10 +9,9 @@ angular.module('atwork.streams')
             '$route',
             '$resource',
             function($route, $resource){
-              console.log("aaaaa");
               var migration = $resource('/streams/migration');
               migration.save({}, function(){
-                console.log("trueeee");
+                
               });
             }
           ]

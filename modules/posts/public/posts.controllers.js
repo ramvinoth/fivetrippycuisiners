@@ -300,7 +300,7 @@ angular.module('atwork.posts')
             data: data
           }).progress(function (evt) {
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-            //console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+            //consoleee.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
           }).success(function (response, status, headers, config) {
             if (response.success) {
               

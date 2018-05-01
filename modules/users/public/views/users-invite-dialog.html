@@ -5,7 +5,7 @@
     <div class="md-padding">
       <form ng-show="!inviteDone" name="inviteForm" ng-submit="doInvite(inviteForm.$valid)" novalidate>
         <md-input-container>
-          <label>Colleague's Full Name</label>
+          <label>Friend's Full Name</label>
           <input name="name" ng-model="name" required md-maxlength="100" minlength="5">
           <div ng-messages="inviteForm.name.$error" ng-show="inviteForm.bio.$dirty">
             <div ng-message="required">This is required!</div>
@@ -15,7 +15,7 @@
         </md-input-container>
 
         <md-input-container>
-          <label>Colleague's Email Address</label>
+          <label>Friend's Email Address</label>
           <input type="email" name="email" ng-model="email" required>
           <div ng-messages="inviteForm.email.$error" ng-show="inviteForm.bio.$dirty">
             <div ng-message="required">This is required!</div>

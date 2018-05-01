@@ -129,7 +129,7 @@ angular.module('atwork.blogs', ['summernote'])
                * Update feed
                * @type {Object}
                */
-              //console.log("response", response.res);
+              
                //$scope.updateFeed();
 
               //$scope.reset();
@@ -144,7 +144,6 @@ angular.module('atwork.blogs', ['summernote'])
       };
 
       $scope.viewBlog = function(blogId){
-        console.log("blogId",blogId);
         appLocation.url('/blog/'+blogId);
       };
 
@@ -212,7 +211,6 @@ angular.module('atwork.blogs', ['summernote'])
        * @return {Void}
        */
       $scope.comment = function(isValid, item) {
-        console.log("ssss");
         if (isValid) {
           var commentContent = this.content;
           

@@ -56,7 +56,7 @@ angular.module('atwork.galleries')
           /**
            * Show dialog
            */
-          console.log("inside Pop Service")
+          
           appDialog.show({
             controller: [
               '$scope',
@@ -85,14 +85,13 @@ angular.module('atwork.galleries')
                 $scope.showPhoto = function (index) {
                     $scope._Index = index;
                 };
-                console.log("imageUrl" ,imageurl);
+                
                 $scope.photos.push({src :imageurl});
                 /**
                  * Hide the dialog
                  * @return {Void}
                  */
                 $scope.hide = function() {
-                  console.log("calling hide");
                   appDialog.hide();
                 };
               }
@@ -222,7 +221,6 @@ angular.module('atwork.galleries')
 
             var applyScope = function(imageResult) {
                 scope.$apply(function() {
-                    //console.log(imageResult);
                     if(attrs.multiple)
                         scope.image.push(imageResult);
                     else
@@ -269,7 +267,6 @@ angular.module('atwork.galleries')
       });
 
       function imagePop($ev, imageurl) {
-        console.log("popup service called", imageurl);
         appGalleryPop.showPopImage($ev, imageurl);
       }
   }

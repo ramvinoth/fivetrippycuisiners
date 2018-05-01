@@ -53,8 +53,6 @@ angular.module('atwork.streams')
       // $scope.toSubscribe = '';
 
       $scope.clearThis = function(item) {
-        console.log($scope);
-        console.log(item);
         $timeout(function() {
           // $scope.toSubscribe = undefined;
         }, 2000);

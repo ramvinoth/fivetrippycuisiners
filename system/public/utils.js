@@ -37,7 +37,7 @@ angular.module('atwork.utils', ['ngRoute', 'ngMaterial'])
         var $this = this;
         var socket = window.io();
         socket.on('connect', function() {
-          console.log('Connected');
+          //console.log('Connected');
         });
         socket.on('disconnect', function() {
           $this.connect();
