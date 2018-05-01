@@ -724,3 +724,8 @@ md-item-content {
 *:focus {
   outline: none !important;
   border: 0 !important; }
+
+.textOverflow {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; }

@@ -913,3 +913,8 @@ $md-background-100: #f5f5f5;
   outline: none !important;
   border: 0 !important;
 }
+.textOverflow{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
