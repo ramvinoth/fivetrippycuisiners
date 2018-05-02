@@ -202,6 +202,10 @@ module.exports = function(System) {
    */
   obj.modify = function (req, res) {
     var user = req.user;
+    var restrictedNames = ['Admin', 'admin', 'Moderator', 'moderator', 'Tamizhan', 'tamizhan'];
+    if(restrictedNames.indexOf(req.body.name) > -1){
+      return json.unhappy({message : "The given username is restricted. Please try someother name"}, res);
+    }
     user.name = req.body.name;
     user.designation = req.body.designation;
     if (req.body.password) {

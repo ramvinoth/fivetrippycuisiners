@@ -39,7 +39,7 @@
           <p>Taking TN to the next level.</p>
         </div>
       </div>
-      <md-sidenav layout="column" class="site-sidenav md-sidenav-left md-whiteframe-z2" md-component-id="left" ng-if="isLoggedIn">
+      <md-sidenav layout="column" class="site-sidenav md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="showSideNav && $mdMedia('gt-sm')" ng-if="isLoggedIn">
         <md-toolbar layout="row">
           <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn" ng-if="isLoggedIn">
             <span class="visuallyhidden">Menu</span>
@@ -69,11 +69,11 @@
                 <button ng-click="toggleSidenav('left')" class="menuBtn" ng-if="isLoggedIn">
                   <span class="visuallyhidden">Menu</span>
                 </button>
-                <!-- <h2 hide-gt-sm flex>{{systemSettings ? systemSettings.workplace : 'AtWork'}}</h2> -->
+                
                 <md-button class="md-old-style" ng-if="isLoggedIn" ng-click="goHome($event)" title="Home" aria-label="Home">
                   <md-inline-list-icon class="fa fa-globe"></md-inline-list-icon>
                 </md-button>
-                <span hide-sm ng-if="!isLoggedIn">{{systemSettings ? systemSettings.workplace : 'AtWork'}}</span>
+                <span hide-sm ng-if="!isLoggedIn">{{systemSettings ? systemSettings.workplace : 'Tamizhaa'}}</span>
                 <span hide-sm hide-md class="tiny" flex>&nbsp; {{barTitle}}</span>
                 <span flex hide-md></span>
                 <md-button class="md-old-style" ng-if="isLoggedIn && (user.roles.indexOf('admin') !== -1)" href="/settings" title="Settings" aria-label="Settings">

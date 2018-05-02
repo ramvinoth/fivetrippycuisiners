@@ -65,10 +65,11 @@ module.exports = function(System) {
                     }
                     var req = request(options, function(err, resp, body) {
                         try{
-                        body = JSON.parse(body);
+                            body = JSON.parse(body);
                         }catch(ex){
-                        console.log(ex);
-                        return "Unable to communicate image server: JOSN Body parse error";
+                            console.log("Error body", body);
+                            console.log(ex);
+                            return "Unable to communicate image server: JOSN Body parse error";
                         }
                         if (err) {
                             console.log('Error ', err);

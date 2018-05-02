@@ -23,7 +23,8 @@ var app = angular.module('AtWork', [
 app.controller('AppCtrl', [
   '$scope', 
   '$route',
-  '$rootScope', 
+  '$rootScope',
+  '$mdMedia', 
   '$mdSidenav',
   '$mdBottomSheet',
   '$location',
@@ -34,12 +35,16 @@ app.controller('AppCtrl', [
   'appSettings',
   'appSettingsValid',
   'appToast',
-  function($scope, $route, $rootScope, $mdSidenav, $mdBottomSheet, $location, $timeout, appLocation, appAuth, appWebSocket, appSettings, appSettingsValid, appToast) {
+  function($scope, $route, $rootScope, $mdMedia, $mdSidenav, $mdBottomSheet, $location, $timeout, appLocation, appAuth, appWebSocket, appSettings, appSettingsValid, appToast) {
     $scope.barTitle = '';
     $scope.search = '';
+    $scope.showSideNav = true;
 
     $scope.toggleSidenav = function(menuId) {
-      $mdSidenav(menuId).toggle();
+      $scope.showSideNav = !$scope.showSideNav;
+      if(!$mdMedia('gt-sm')){
+        $mdSidenav(menuId).toggle();
+      }
     };
 
     $scope.updateLoginStatus = function() {
