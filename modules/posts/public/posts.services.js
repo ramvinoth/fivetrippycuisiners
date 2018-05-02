@@ -271,10 +271,7 @@ angular.module('atwork.posts')
             ID = url[2].split(/[^0-9a-z_\-]/i);
             ID = ID[0];
           }
-          else {
-            ID = url;
-          }
-            return ID;
+          return ID;
         },
       }
     }
