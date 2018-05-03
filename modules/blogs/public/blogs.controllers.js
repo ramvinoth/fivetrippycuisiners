@@ -107,7 +107,6 @@ angular.module('atwork.blogs', ['summernote'])
        * @return {Void}
        */
       $scope.create = function(isValid, item) {
-        console.log("filter : ", htmlToPlaintextFilter(this.content).substr(0, 50)+"...");
         if (isValid) {
           var blog = new appBlogs.single({
             title: this.title,
