@@ -14,7 +14,8 @@ angular.module('atwork.blogs', ['summernote'])
     'appBlogs',
     'appBlogsFeed',
     'resolvedBlogs',
-    function($scope, $rootScope, $routeParams, $timeout, appAuth, appToast, appStorage, appLocation, appWebSocket, appBlogs, appBlogsFeed, resolvedBlogs) {
+    'htmlToPlaintextFilter',
+    function($scope, $rootScope, $routeParams, $timeout, appAuth, appToast, appStorage, appLocation, appWebSocket, appBlogs, appBlogsFeed, resolvedBlogs, htmlToPlaintextFilter) {
       
       $scope.content = '';
       $scope.lastUpdated = 0;
@@ -106,12 +107,13 @@ angular.module('atwork.blogs', ['summernote'])
        * @return {Void}
        */
       $scope.create = function(isValid, item) {
+        console.log("filter : ", htmlToPlaintextFilter(this.content).substr(0, 50)+"...");
         if (isValid) {
           var blog = new appBlogs.single({
             title: this.title,
-            short_title: this.title.substr(0, 20),
+            short_title: htmlToPlaintextFilter(this.title).substr(0, 20)+"...",
             content: this.content,
-            short_desc: this.content.substr(0, 50)+"...",
+            short_desc: htmlToPlaintextFilter(this.content).substr(0, 50)+"...",
           });
           
           blog.$save(function(response) {

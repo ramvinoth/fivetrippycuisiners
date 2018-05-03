@@ -22,6 +22,9 @@ angular.module('atwork.blogs')
         controller: 'BlogsCtrl',
         resolve: {
           resolvedBlogs: resolvedBlogs({limitComments: false})
+        },
+        meta: {
+          disableUpdate: true
         }
       })
       ;

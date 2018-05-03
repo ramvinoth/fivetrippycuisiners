@@ -14,7 +14,7 @@ var app = angular.module('AtWork', [
 ])
 .config(['$routeProvider','ngMetaProvider',function($routeProvider, ngMetaProvider) {
   ngMetaProvider.setDefaultTitle('First ever social network for Tamizhans');
-  //ngMetaProvider.setDefaultDescription('Taking TN to the next level');
+  ngMetaProvider.setDefaultTag('description', 'Taking TN to the next level');
 }])
 .run(['ngMeta', function(ngMeta) {
   ngMeta.init();
