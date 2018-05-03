@@ -300,8 +300,12 @@ module.exports = function(System) {
     //TODO: pagination
     var user = req.user;
     var criteria = { 
-      creator: { $in: user.following.concat(user._id) },
-      stream: undefined
+      $or:[{
+        creator: { $in: user.following.concat(user._id) }
+      },
+      {
+        stream: { $in: user.streams },
+      }]
     };
     if (req.query && req.query.timestamp) {
       criteria.created = { $gte: req.query.timestamp };
