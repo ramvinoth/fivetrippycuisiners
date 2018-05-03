@@ -9,7 +9,7 @@
                 $ {{ stream.title }} <span class="badge" ng-if="stream.unread">{{ stream.unread }}</span>
             </md-button>
             <div class="pull-right">
-                <md-button class="btn no-case md-old-style no-bold md-primary" ng-click="unsubscribe(stream)" title="Unsubscribe">
+                <md-button class="btn no-case md-old-style no-bold md-primary" aria-label="Unsubscribe" ng-click="unsubscribe(stream)" title="Unsubscribe">
                     <md-inline-list-icon class="fa fa-sign-out"></md-inline-list-icon>
                 </md-button>
             </div>
