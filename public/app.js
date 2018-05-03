@@ -10,8 +10,8 @@ var app = angular.module('AtWork', [
   'atwork.notifications', 
   'atwork.settings', 
   'ngMaterial',
-  'ngMeta',
 ])
+/*
 .config(['$routeProvider','ngMetaProvider',function($routeProvider, ngMetaProvider) {
   ngMetaProvider.setDefaultTitle('First ever social network for Tamizhans');
   ngMetaProvider.setDefaultTag('description', 'Taking TN to the next level');
@@ -19,7 +19,7 @@ var app = angular.module('AtWork', [
 .run(['ngMeta', function(ngMeta) {
   ngMeta.init();
 }]);
-
+*/
 app.controller('AppCtrl', [
   '$scope', 
   '$route',

@@ -92,8 +92,8 @@ angular.module('atwork.blogs')
   ])
   .factory('appBlogsFeed', [
     'appBlogs',
-    'ngMeta',
-    function(appBlogs, ngMeta) {
+    /*'ngMeta',*/
+    function(appBlogs/*, ngMeta*/) {
       return {
         getBlogs: function(options, cb) {
           options = options || {};
@@ -198,8 +198,8 @@ angular.module('atwork.blogs')
                * @type {Array}
                */
               //Set Meta tag for URL sharing
-              ngMeta.setTitle(timelineData.res.record.title);
-              ngMeta.setTag('description', timelineData.res.record.short_desc)
+              //ngMeta.setTitle(timelineData.res.record.title);
+              //ngMeta.setTag('description', timelineData.res.record.short_desc)
               
               timelineData.res.records = [timelineData.res.record];
               doUpdate(timelineData);
