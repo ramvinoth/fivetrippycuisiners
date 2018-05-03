@@ -8,12 +8,18 @@ module.exports = function(System) {
     var routes = [];
     
     routes.push({
-        method: 'post',
-        path: '/blogs/add',
-        handler: blogs.create,
-        authorized: true
-      });
-
+      method: 'post',
+      path: '/blogs/add',
+      handler: blogs.create,
+      authorized: true
+    });
+    
+    routes.push({
+      method: 'post',
+      path: '/',
+      handler: blogs.create,
+      authorized: true
+    });
     routes.push({
       method: 'get',
       path: '/',
