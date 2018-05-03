@@ -109,9 +109,9 @@ angular.module('atwork.blogs', ['summernote'])
         if (isValid) {
           var blog = new appBlogs.single({
             title: this.title,
-            short_title: this.title.substr(1, 20),
+            short_title: this.title.substr(0, 20),
             content: this.content,
-            short_desc: this.content.substr(1, 50),
+            short_desc: this.content.substr(0, 50)+"...",
           });
           
           blog.$save(function(response) {
