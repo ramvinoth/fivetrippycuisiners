@@ -100,6 +100,14 @@ angular.module('atwork.posts')
       };
     }
   ])
+  .filter('appPostByPassFilter', [
+    '$sce',
+    function($sce) {
+      return function(text) {
+        return $sce.trustAsHtml(text);
+      };
+    }
+  ])
   .factory('appPostsFeed', [
     'appPosts',
     function(appPosts) {

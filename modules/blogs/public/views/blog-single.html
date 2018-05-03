@@ -57,7 +57,7 @@
             <div class="aw-item-content" flex>
                 <h2>{{item.title}}</h2>
                 <cite>by {{item.creator.name}} on {{item.created | date}}</cite>
-                <p class="primaryColors aw-post-content" ng-bind-html="item.content"></p>
+                <p class="primaryColors aw-post-content" ng-bind-html="item.content | appPostByPassFilter"></p>
                 <div class="post-actions">
                 <span class="likes primaryColors">
                     <a ng-if="!item.liked" class="like" ng-click="doLike(item)"><span class="fa fa-thumbs-o-up"></span> Like</a>
