@@ -180,7 +180,32 @@ module.exports = function(System) {
             };
             data.html = html;
             System.plugins.notifications.sendByEmail(user, data);
-            return json.happy(user, res);
+
+            try{
+              if(user.streams.length < 3){
+                var streamArr = []
+                Stream.find({}, function(err, streams){
+                  streams.forEach(function(stream){
+                    streamArr.push(stream._id);
+                  });
+                  user.streams = streamArr;
+                  user.save(function(err) {
+                    if (err) {
+                      console.log("Error in stream update on login : ",err);
+                    }else{
+                      console.log("Stream update successfull on login : ");
+                    }
+                  });
+                })
+              }
+            }catch(ex){
+              console.log("Exception in subscribing streams to user on new login", ex);
+            }
+            //return json.happy(user, res);
+            return json.happy({
+              record: user,
+              token: user.token
+            }, res);
           });
         } else {
           return json.happy({
@@ -251,7 +276,8 @@ module.exports = function(System) {
         if (err) {
           json.unhappy(err, res);
         } else {
-          if (user && user.hashPassword(req.body.password) === user.hashed_password && user.active) {
+          //user.active check is disabled for time being.
+          if (user && user.hashPassword(req.body.password) === user.hashed_password /*&& user.active*/) {
             json.happy({
               record: user,
               token: user.token

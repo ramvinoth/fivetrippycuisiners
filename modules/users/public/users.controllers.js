@@ -456,16 +456,16 @@ angular.module('atwork.users')
             designation: this.designation,
             password: this.password
           });
-
           user.$save(function(response) {
             /**
              * Save reference to use for resending activation email if needed
              * @type {Object}
              */
             $scope.registeredUserId = response.res._id;
-            
             if (response.success) {
-              if (response.res && response.res.record && response.res.record.active) {
+              //response.res.record.active check is disabled for time being
+              if (response.res && response.res.record /*&& response.res.record.active*/) {
+                console.log("user response success : ",response.success);
                 $scope.postLogin(response.res.record, response.res.token);
               } else {
                 $scope.regDone = true;

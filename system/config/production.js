@@ -5,10 +5,10 @@ module.exports = {
   IMG_STATIC: 'http://www.tamizhans.in',
   IMG_STATIC_URL: 'http://www.tamizhans.in/image.php',
   REQUESTS_DELAY_SYSTEM: 0,
-  baseURL: (process.env.BASEURL || 'https://fivetrippycuisiners.herokuapp.com'),
+  baseURL: (process.env.BASEURL || 'http://www.tamizhans.com'),
   db: 'mongodb://viyabiz_vinz:viyaSmart$6@ds261078.mlab.com:61078/trippycuisiners',
   server: {
-    host: process.env.SERVER ||'https://fivetrippycuisiners.herokuapp.com',
+    host: process.env.SERVER ||'http://www.tamizhans.com',
     port: process.env.PORT
   },
   secret: 'trippycuisinerssecret',
