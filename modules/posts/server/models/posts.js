@@ -83,6 +83,8 @@ var PostSchema = new Schema({
     type: Number,
     default: 0
   }
+},{
+  usePushEach: true,
 });
 
 /**
@@ -111,7 +113,9 @@ PostSchema.methods = {
   },
   afterSave: function(user, limitComments) {
     var obj = this;
-    obj.liked = obj.likes.indexOf(user._id) != -1;
+    if(user){
+      obj.liked = obj.likes.indexOf(user._id) != -1;
+    }
     if (limitComments && obj.comments && obj.comments.length > 3) {
       obj.hasMoreComments = obj.comments.length - 3;
       obj.comments = obj.comments.slice(0, 3);

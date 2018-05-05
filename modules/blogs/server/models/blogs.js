@@ -119,7 +119,9 @@ BlogSchema.methods = {
     },
     afterSave: function(user, limitComments) {
       var obj = this;
-      obj.liked = obj.likes.indexOf(user._id) != -1;
+      if(user && user._id){ //For unauthenticated url access case
+        obj.liked = obj.likes.indexOf(user._id) != -1;
+      }
       if (limitComments && obj.comments && obj.comments.length > 3) {
         obj.hasMoreComments = obj.comments.length - 3;
         obj.comments = obj.comments.slice(0, 3);

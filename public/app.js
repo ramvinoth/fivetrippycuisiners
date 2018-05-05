@@ -10,7 +10,9 @@ var app = angular.module('AtWork', [
   'atwork.notifications', 
   'atwork.settings', 
   'ngMaterial',
-])
+]).config(['$qProvider', function ($qProvider) {
+  $qProvider.errorOnUnhandledRejections(false);
+}]);
 /*
 .config(['$routeProvider','ngMetaProvider',function($routeProvider, ngMetaProvider) {
   ngMetaProvider.setDefaultTitle('First ever social network for Tamizhans');
@@ -83,6 +85,7 @@ app.controller('AppCtrl', [
      * Scroll the view to top on route change
      */
     $scope.$on('$routeChangeSuccess', function() {
+      console.log("routeChanged");
       angular.element('*[md-scroll-y]').animate({scrollTop: 0}, 300);
       $mdSidenav('left').close();
     });
@@ -100,6 +103,7 @@ app.controller('AppCtrl', [
        */
       initiateSettings(function() {
         $scope.$on('$routeChangeStart', function (event, toState) {
+          console.log("routeChangeStart");
           var valid = appSettingsValid();
           if (!valid) {
             appToast('Please complete the setup first.');
@@ -126,7 +130,7 @@ app.controller('AppCtrl', [
     $scope.updateLoginStatus();
     $timeout(function() {
       if (!appAuth.isLoggedIn()) {
-        if (window.location.href.indexOf('/activate/') == -1 && window.location.href.indexOf('/changePassword/') == -1) {
+        if (window.location.href.indexOf('/activate/') == -1 && window.location.href.indexOf('/changePassword/') == -1 && window.location.href.indexOf('/blog/') == -1 && window.location.href.indexOf('/post/') == -1) {
           appLocation.url('/login');
         }
         initiateSettings();

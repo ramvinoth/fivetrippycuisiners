@@ -46,7 +46,7 @@ module.exports = function(System) {
     method: 'get',
     path: '/:postId',
     handler: posts.single,
-    authorized: true
+    authorized: false
   });
 
   routes.push({

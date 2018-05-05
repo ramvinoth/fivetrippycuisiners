@@ -365,7 +365,7 @@ module.exports = function(System) {
         /**
          * Mark all notifications as read, for the current user, for this single post
          */
-        if (req.query.allowMarking) {
+        if (req.query.allowMarking && req.user) {
           var userModified = false;
           req.user.notifications.map(function(notification) {
             /**

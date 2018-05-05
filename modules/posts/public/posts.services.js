@@ -290,7 +290,8 @@ angular.module('atwork.posts')
     'appAuth',
     'appToast',
     'appDialog',
-    function(appPosts, appWebSocket, appAuth, appToast, appDialog) {
+    'appLocation',
+    function(appPosts, appWebSocket, appAuth, appToast, appDialog, appLocation) {
       return {
         templateUrl: '/modules/posts/views/post-single.html',
         controller: [

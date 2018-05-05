@@ -31,7 +31,7 @@ module.exports = function(System) {
       method: 'get',
       path: '/:blogId',
       handler: blogs.single,
-      authorized: true
+      authorized: false
     });
   
     routes.push({

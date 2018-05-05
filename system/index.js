@@ -59,7 +59,9 @@ app.use(express.static('public', options));
 app.use('/dist', express.static('dist', options));
 app.use('/system', express.static('system/public', options));
 app.use('/system/public/views', express.static('system/public/views', options));
-
+app.set('views', __dirname + '/../');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 /**
  * Path where modules are located
  */
@@ -287,6 +289,36 @@ module.exports = {
      */
     loadPlugins(__dirname, this);
     
+    /**
+     * nonSPArouter for SEO and web crawlers
+     
+
+
+    var nonSPArouter = express.Router(), server;
+    nonSPArouter.get('/blogs/:blogId', function(req,res) { 
+      var img = 'placeholder.png';
+      res.render('public/bot.html', 
+        { 
+          img : img, 
+          url : 'https://www.tamizhans.com/', 
+          title : res.record, 
+          description : 'This is designed to appeal to bots', 
+          imageUrl : 'https://bot-social-share.herokuapp.com'+img 
+        }
+      ); 
+    });
+
+    app.use(function(req,res,next) { var ua = req.headers['user-agent'];
+    
+      if (/^(facebookexternalhit)|(Twitterbot)|(Pinterest)/gi.test(ua)) {
+
+        console.log(ua,'is a bot'); 
+        nonSPArouter(req,res,next); 
+      } else { 
+        next(); 
+      } 
+    });
+    */
     /**
      * Finally, load dependencies and start the server
      */

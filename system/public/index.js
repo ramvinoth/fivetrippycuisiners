@@ -22,6 +22,20 @@ angular.module('atwork.system')
     };
   }
 ])
+.factory('authInterceptorService', ['$q','$location','$injector', function ($q, $location, $injector){
+  var responseError = function (rejection) {
+      if (rejection.status === 403 && rejection.config.url.indexOf("users/notifications") == -1) {
+        var appToast = $injector.get('appToast');
+        appToast("Please login to continue");
+        $location.path('login');
+      }
+      return $q.reject(rejection);
+  };
+
+  return {
+      responseError: responseError
+  };
+}])
 .factory('appSearch', [
   '$resource',
   function($resource) {
@@ -38,7 +52,10 @@ angular.module('atwork.system')
   '$mdThemingProvider',
   'cfpLoadingBarProvider',
   function ($httpProvider, $mdThemingProvider, cfpLoadingBarProvider) {
+    
+    $httpProvider.interceptors.push('authInterceptorService');
     $httpProvider.interceptors.push('tokenHttpInterceptor');
+    
     // $mdThemingProvider.theme('default')
     // .primaryPalette('blue')
     // .accentPalette('blue-grey');
