@@ -291,25 +291,40 @@ module.exports = {
     
     /**
      * nonSPArouter for SEO and web crawlers
-     
+     */
 
 
     var nonSPArouter = express.Router(), server;
     nonSPArouter.get('/blogs/:blogId', function(req,res) { 
-      var img = 'placeholder.png';
+      var img = 'anbendru_bharathiaar.png';
+      //var blogs = require('../modules/blogs/server/controllers/blogs')($this);
+      var mongoose = require('mongoose');
+      var Blog = mongoose.model('Blog');
+      Blog.findOne({
+        _id: req.params.blogId
+      })
+      .populate('creator')
+      .populate('comments')
+      .populate('comments.creator')
+      .populate('stream')
+      .exec(function(err, post) {
+        
+      //resobj = blogs.single(req, res);
+      console.log("resobj", post.content);
       res.render('public/bot.html', 
         { 
           img : img, 
           url : 'https://www.tamizhans.com/', 
-          title : res.record, 
-          description : 'This is designed to appeal to bots', 
-          imageUrl : 'https://bot-social-share.herokuapp.com'+img 
+          title : post.title, 
+          description : post.short_desc, 
+          imageUrl : 'https://www.tamizhans.com/'+img 
         }
       ); 
+      });
     });
 
-    app.use(function(req,res,next) { var ua = req.headers['user-agent'];
-    
+    app.use(function(req,res,next) { 
+      var ua = req.headers['user-agent'];
       if (/^(facebookexternalhit)|(Twitterbot)|(Pinterest)/gi.test(ua)) {
 
         console.log(ua,'is a bot'); 
@@ -318,7 +333,7 @@ module.exports = {
         next(); 
       } 
     });
-    */
+    
     /**
      * Finally, load dependencies and start the server
      */

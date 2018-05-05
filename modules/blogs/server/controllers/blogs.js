@@ -335,7 +335,10 @@ module.exports = function(System) {
               });
             }
           }
-  
+          var ua = req.headers['user-agent'];
+          if (/^(facebookexternalhit)|(Twitterbot)|(Pinterest)/gi.test(ua)) {
+            return post;
+          }
           return json.happy({
             record: post
           }, res);
