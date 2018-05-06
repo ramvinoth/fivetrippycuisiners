@@ -22,6 +22,9 @@ angular.module('atwork.posts')
         controller: 'PostsCtrl',
         resolve: {
           resolvedFeeds: resolvedFeeds({limitComments: false})
+        },
+        meta: {
+          disableUpdate: true
         }
       })
       .when('/feed/:hashtag', {

@@ -110,7 +110,8 @@ angular.module('atwork.posts')
   ])
   .factory('appPostsFeed', [
     'appPosts',
-    function(appPosts) {
+    'ngMeta',
+    function(appPosts, ngMeta) {
       return {
         getFeeds: function(options, cb) {
           options = options || {};
@@ -214,6 +215,10 @@ angular.module('atwork.posts')
                * The retrieved record is the only one to show
                * @type {Array}
                */
+              //Set Meta tag for URL sharing
+              ngMeta.setTitle(timelineData.res.record.stream.title);
+              ngMeta.setTag('description', timelineData.res.record.content);
+
               timelineData.res.records = [timelineData.res.record];
               doUpdate(timelineData);
 

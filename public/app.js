@@ -10,17 +10,20 @@ var app = angular.module('AtWork', [
   'atwork.notifications', 
   'atwork.settings', 
   'ngMaterial',
-]).config(['$qProvider', function ($qProvider) {
+  'ngMeta',
+]).config(['$qProvider','$routeProvider','ngMetaProvider', function ($qProvider, $routeProvider, ngMetaProvider) {
   $qProvider.errorOnUnhandledRejections(false);
-}]);
-/*
-.config(['$routeProvider','ngMetaProvider',function($routeProvider, ngMetaProvider) {
   ngMetaProvider.setDefaultTitle('First ever social network for Tamizhans');
   ngMetaProvider.setDefaultTag('description', 'Taking TN to the next level');
 }])
 .run(['ngMeta', function(ngMeta) {
   ngMeta.init();
 }]);
+/*
+.config(['$routeProvider','ngMetaProvider',function($routeProvider, ngMetaProvider) {
+  ngMetaProvider.setDefaultTitle('First ever social network for Tamizhans');
+  ngMetaProvider.setDefaultTag('description', 'Taking TN to the next level');
+}])
 */
 app.controller('AppCtrl', [
   '$scope', 

@@ -25,7 +25,7 @@ var SystemSettings = mongoose.model('settings');
 /**
  * Middleware
  */
-//app.use(require('prerender-node').set('prerenderToken', 'HckHdYtoEtgRTNyOzUOx'));
+app.use(require('prerender-node').set('prerenderToken', 'HckHdYtoEtgRTNyOzUOx'));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 var storage = multer.diskStorage({
@@ -291,8 +291,7 @@ module.exports = {
     
     /**
      * nonSPArouter for SEO and web crawlers
-     */
-
+     
 
     var nonSPArouter = express.Router(), server;
     nonSPArouter.get('/blogs/:blogId', function(req,res) { 
@@ -317,7 +316,7 @@ module.exports = {
           url : 'https://www.tamizhans.com/', 
           title : post.title, 
           description : post.short_desc, 
-          imageUrl : 'https://www.tamizhans.com/'+img 
+          imageUrl : 'https://bot-social-share.herokuapp.com'+img 
         }
       ); 
       });
@@ -333,7 +332,7 @@ module.exports = {
         next(); 
       } 
     });
-    
+    */
     /**
      * Finally, load dependencies and start the server
      */
