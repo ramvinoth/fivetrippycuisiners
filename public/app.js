@@ -16,8 +16,78 @@ var app = angular.module('AtWork', [
   ngMetaProvider.setDefaultTitle('First ever social network for Tamizhans');
   ngMetaProvider.setDefaultTag('description', 'Taking TN to the next level');
 }])
-.run(['ngMeta', function(ngMeta) {
+.service('MetaTagsService', function(){
+  var service = this;
+  service.setDefaultTags = setDefaultTags;
+  service.setTags = setTags;
+  var defaultTags = {};
+  var tagElements = [];
+  function setDefaultTags(tags){
+    angular.copy(tags, defaultTags);
+    setTags({});
+  }
+  function setTags(tags){
+    clearTags();
+    mergeDefaultTags(tags);
+    angular.forEach(tags, function(content, name){
+      var tagElement = getTagElement(content, name);
+      document.head.appendChild(tagElement);
+      tagElements.push(tagElement);
+    });
+  }
+  function mergeDefaultTags(tags){
+    angular.forEach(defaultTags, function(defaultTagContent, defaultTagName){
+      if(!tags[defaultTagName]){
+        tags[defaultTagName] = defaultTagContent;
+      } else if(defaultTagName === 'title'){
+        tags['title'] += ' - '+defaultTagContent;
+      }
+    });
+    return tags;
+  }
+  function getTagElement(content, name){
+    if(name == 'title'){
+      // Special provision for the title element
+      var title = document.createElement('title');
+      title.textContent = content;
+      return title;
+    } else {
+      // Opengraph uses [property], but everything else uses [name]
+      var nameAttr = (name.indexOf('og:') === 0) ? 'property' : 'name';
+      var meta = document.createElement('meta');
+      meta.setAttribute(nameAttr, name);
+      meta.setAttribute('content', content);
+      return meta;
+    }
+  }
+  function clearTags(){
+    angular.forEach(tagElements, function(tagElement){
+      document.head.removeChild(tagElement);
+    });
+    tagElements.length = 0;
+  }
+})
+.run(['ngMeta', 'MetaTagsService', function(ngMeta, MetaTagsService) {
   ngMeta.init();
+  MetaTagsService.setDefaultTags({
+    // General SEO
+    'og:title': 'First ever social network for Tamizhans',
+    'author': 'admin',
+    'og:description': 'Taking TN to the next level',
+    'og:url': 'http://www.tamizhans.com/',
+    'og:type': 'Social Network',
+    'og:image': 'http://www.tamizhans.com/images/anbendru_bharathiaar.png',
+    'og:image:width': '680',
+    'og:image:height': '340',
+    // Indexing / Spiders
+    'googlebot': 'all',
+    'bingbot': 'all',
+    'robots': 'all',
+    // OpenGraph
+    'og:site_name': 'Tamizhans Social Network',
+    // Twitter
+    'twitter:site': '@tamizhans',
+  });
 }]);
 /*
 .config(['$routeProvider','ngMetaProvider',function($routeProvider, ngMetaProvider) {

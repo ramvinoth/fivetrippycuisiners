@@ -111,7 +111,8 @@ angular.module('atwork.posts')
   .factory('appPostsFeed', [
     'appPosts',
     'ngMeta',
-    function(appPosts, ngMeta) {
+    'MetaTagsService',
+    function(appPosts, ngMeta, MetaTagsService) {
       return {
         getFeeds: function(options, cb) {
           options = options || {};
@@ -218,6 +219,23 @@ angular.module('atwork.posts')
               //Set Meta tag for URL sharing
               ngMeta.setTitle(timelineData.res.record.stream.title);
               ngMeta.setTag('description', timelineData.res.record.content);
+              var singleRecord = timelineData.res.record;
+              MetaTagsService.setTags({
+                // General SEO
+                'title': "Tamizhans Social Network",
+                // OpenGraph
+                'og:type': 'Post',
+                'og:title': singleRecord.stream.title,
+                'og:description': singleRecord.content,
+                //'og:image': singleRecord.image,
+                /* Twitter
+                'twitter:card': 'summary_large_image',
+                'twitter:creator': article.twitter_id,
+                'twitter:title': article.title,
+                'twitter:description': article.description,
+                'twitter:image': article.image,
+                */
+              });
 
               timelineData.res.records = [timelineData.res.record];
               doUpdate(timelineData);
