@@ -74,7 +74,7 @@ var app = angular.module('AtWork', [
     'og:title': 'First ever social network for Tamizhans',
     'author': 'admin',
     'og:description': 'Taking TN to the next level',
-    'og:url': 'http://www.tamizhans.com/',
+    //'og:url': 'http://www.tamizhans.com/',
     'og:type': 'website',
     'og:app_id': 'website',
     'og:image': 'http://www.tamizhans.com/images/anbendru_bharathiaar.png',

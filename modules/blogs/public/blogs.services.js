@@ -207,6 +207,7 @@ angular.module('atwork.blogs')
                 'title': "Tamizhans Social Network",
                 // OpenGraph
                 'og:type': 'Blog',
+                'og:url': 'http://www.tamizhans.com/blog/'+singleRecord._id,
                 'og:title': singleRecord.title,
                 'og:description': singleRecord.short_desc,
                 //'og:image': singleRecord.image,
