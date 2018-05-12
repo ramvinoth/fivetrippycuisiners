@@ -76,7 +76,7 @@ var app = angular.module('AtWork', [
     'og:description': 'Taking TN to the next level',
     //'og:url': 'http://www.tamizhans.com/',
     'og:type': 'website',
-    'og:app_id': 'website',
+    'og:app_id': '183663679128594',
     'og:image': 'http://www.tamizhans.com/images/anbendru_bharathiaar.png',
     'og:image:width': '680',
     'og:image:height': '340',
