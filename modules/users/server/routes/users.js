@@ -110,5 +110,17 @@ module.exports = function(System) {
     authorized: true
   });
 
+  /*
+  |--------------------------------------------------------------------------
+  | Login with Facebook
+  |--------------------------------------------------------------------------
+  */
+  routes.push({
+    method: 'post',
+    path: '/auth/facebook',
+    handler: users.social_login,
+    authorized: true
+  });
+
   return routes;
 };

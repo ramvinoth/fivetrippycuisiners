@@ -314,6 +314,8 @@ module.exports = function(System) {
       delete criteria.created;
       criteria.content = new RegExp(req.query.filter, 'i');
     }
+    //To show all users feed - temporary code
+    delete criteria.$or;
     Post.find(criteria, null, {sort: {created: -1}})
     .populate('creator')
     .populate('comments')

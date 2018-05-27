@@ -11,10 +11,17 @@ var app = angular.module('AtWork', [
   'atwork.settings', 
   'ngMaterial',
   'ngMeta',
-]).config(['$qProvider','$routeProvider','ngMetaProvider', function ($qProvider, $routeProvider, ngMetaProvider) {
+  'satellizer'
+]).config(['$qProvider','$routeProvider','ngMetaProvider', '$authProvider', function ($qProvider, $routeProvider, ngMetaProvider, $authProvider) {
   $qProvider.errorOnUnhandledRejections(false);
   ngMetaProvider.setDefaultTitle('First ever social network for Tamizhans');
   ngMetaProvider.setDefaultTag('description', 'Taking TN to the next level');
+  $authProvider.facebook({
+    clientId: '183663679128594',
+    url: '/users/auth/facebook',
+    redirectUri: window.location.origin + '/login',
+    scope: ['public_profile','email']
+  });
 }])
 .service('MetaTagsService', function(){
   var service = this;
@@ -67,7 +74,7 @@ var app = angular.module('AtWork', [
     tagElements.length = 0;
   }
 })
-.run(['ngMeta', 'MetaTagsService', function(ngMeta, MetaTagsService) {
+.run(['ngMeta', 'MetaTagsService', '$rootScope', '$window', function(ngMeta, MetaTagsService, $rootScope, $window) {
   ngMeta.init();
   MetaTagsService.setDefaultTags({
     // General SEO
@@ -90,12 +97,6 @@ var app = angular.module('AtWork', [
     'twitter:site': '@tamizhans',
   });
 }]);
-/*
-.config(['$routeProvider','ngMetaProvider',function($routeProvider, ngMetaProvider) {
-  ngMetaProvider.setDefaultTitle('First ever social network for Tamizhans');
-  ngMetaProvider.setDefaultTag('description', 'Taking TN to the next level');
-}])
-*/
 app.controller('AppCtrl', [
   '$scope', 
   '$route',
