@@ -27,6 +27,7 @@ node_modules
 public/bower_components
 public/uploads
 build/
+system/index_development.js
 
 # Users Environment Variables
 .lock-wscript

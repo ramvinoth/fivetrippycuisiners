@@ -1,27 +1,20 @@
 /**
  * Load dependencies
  */
-require('newrelic');
 console.log("inside settings.js  : "+process.env.NODE_ENV);
 var express = require('express');
-var path = require('path');
+	
 var app = express();
 app.use(require('prerender-node').set('prerenderToken', 'HckHdYtoEtgRTNyOzUOx'));
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 var fs = require('fs');
-var certOptions = {};
-if (app.get('env') === 'development') {
-  var certOptions = {
-    key: fs.readFileSync(path.resolve('build/cert/server.key')),
-    cert: fs.readFileSync(path.resolve('build/cert/server.crt'))
-  }
-}
-var https = require('https').createServer(certOptions, app);
-var io = require('socket.io')(https);
 var mongoose = require('mongoose');
 var Config = require('./config/' + (process.env.NODE_ENV || 'development'));
 var bodyParser = require('body-parser');
 var multer = require('multer'); 
 var morgan = require('morgan');
+var path = require('path');
 var nodemailer = require('nodemailer');
 var UPLOAD_PATH = "./public/uploads/";
 /**
@@ -62,13 +55,6 @@ var options = {
     res.set('x-timestamp', Date.now())
   }
 };
-// Force HTTPS on Heroku
-if (app.get('env') === 'production') {
-  app.use(function(req, res, next) {
-    var protocol = req.get('x-forwarded-proto');
-    protocol == 'https' ? next() : res.redirect('https://' + req.hostname + req.url);
-  });
-}
 app.use(express.static('public', options));
 app.use('/dist', express.static('dist', options));
 app.use('/system', express.static('system/public', options));
@@ -94,11 +80,11 @@ function startServer() {
     res.type('html').send(output);
     next();
   });
-  var server = https.listen(Config.server.port, function() {
+  var server = http.listen(Config.server.port, function() {
     var host = server.address().address
     var port = server.address().port
 
-    console.log('Tamizhans App running at https://%s:%s', host, port);
+    console.log('Tamizhans App running at http://%s:%s', host, port);
   });
 }
 

@@ -430,29 +430,10 @@ angular.module('atwork.users')
     'appStorage',
     'appLocation',
     'appDialog',
-    '$auth',
-    function($scope, $rootScope, appUsers, appAuth, appToast, appStorage, appLocation, appDialog, $auth) {
+    function($scope, $rootScope, appUsers, appAuth, appToast, appStorage, appLocation, appDialog) {
       // $scope.email = 'riten.sv@gmail.com';
       // $scope.password = 'jjk3e0jx';
-      //Social login - satellizer
-      $scope.authenticate = function(provider) {
-        console.log("authenticate", provider);
-        $auth.authenticate(provider).then(function() {
-          appToast('You have successfully signed in with ' + provider + '!');
-          appLocation('/');
-        })
-        .catch(function(error) {
-          if (error.message) {
-            // Satellizer promise reject error.
-            appToast(error.message);
-          } else if (error.data) {
-            // HTTP response error from server
-            appToast(error.data.message, error.status);
-          } else {
-            appToast.error(error);
-          }
-        });
-      };
+
       /**
        * Reset the form
        * @return {Void}
@@ -564,7 +545,6 @@ angular.module('atwork.users')
        * @return {Void}
        */
       $scope.login = function(isValid) {
-        console.log("in login function", $scope.user);
         if (isValid) {
           var auth = new appUsers.auth({
             email: this.email,

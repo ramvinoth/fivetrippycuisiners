@@ -19,7 +19,6 @@
         <md-tabs class="md-accent" md-dynamic-height md-selected="1">
           <md-tab label="Login">
             <form name="loginForm" ng-submit="login(loginForm.$valid)" novalidate>
-              <button ng-click="authenticate('facebook')">Sign in with Facebook</button>
               <md-input-container>
                 <label>Email Address</label>
                 <input type="email" name="email" ng-model="email" required>
