@@ -11,10 +11,18 @@ var app = angular.module('AtWork', [
   'atwork.settings', 
   'ngMaterial',
   'ngMeta',
-]).config(['$qProvider','$routeProvider','ngMetaProvider', function ($qProvider, $routeProvider, ngMetaProvider) {
+  'satellizer',
+]).config(['$qProvider','$routeProvider','ngMetaProvider', '$authProvider', function ($qProvider, $routeProvider, ngMetaProvider, $authProvider) {
   $qProvider.errorOnUnhandledRejections(false);
   ngMetaProvider.setDefaultTitle('First ever social network for Tamizhans');
   ngMetaProvider.setDefaultTag('description', 'Taking TN to the next level');
+  $authProvider.facebook({
+    clientId: '183663679128594',
+    url: '/users/auth/facebook',
+    redirectUri: window.location.origin + '/login/oauth',
+    scope: ['public_profile', 'email'],
+  });
+  $authProvider.loginUrl = '/login/oauth';
 }])
 .service('MetaTagsService', function(){
   var service = this;
@@ -90,12 +98,6 @@ var app = angular.module('AtWork', [
     'twitter:site': '@tamizhans',
   });
 }]);
-/*
-.config(['$routeProvider','ngMetaProvider',function($routeProvider, ngMetaProvider) {
-  ngMetaProvider.setDefaultTitle('First ever social network for Tamizhans');
-  ngMetaProvider.setDefaultTag('description', 'Taking TN to the next level');
-}])
-*/
 app.controller('AppCtrl', [
   '$scope', 
   '$route',
@@ -202,7 +204,7 @@ app.controller('AppCtrl', [
     $scope.updateLoginStatus();
     $timeout(function() {
       if (!appAuth.isLoggedIn()) {
-        if (window.location.href.indexOf('/activate/') == -1 && window.location.href.indexOf('/changePassword/') == -1 && window.location.href.indexOf('/blog/') == -1 && window.location.href.indexOf('/post/') == -1) {
+        if (window.location.href.indexOf('/activate/') == -1 && window.location.href.indexOf('/changePassword/') == -1 && window.location.href.indexOf('/blog/') == -1 && window.location.href.indexOf('/post/') && window.location.href.indexOf('/login/oauth') == -1) {
           appLocation.url('/login');
         }
         initiateSettings();

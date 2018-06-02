@@ -67,7 +67,7 @@ gulp.task('sass', function () {
 
 gulp.task('default', ['sass', 'pack']);
 
-var watcher = gulp.watch(['public/**/*.scss', 'modules/**/public/**/*.js'], ['default', 'pack']);
+var watcher = gulp.watch(['public/**/*.scss', 'modules/**/public/**/*.js', 'public/app.js'], ['default', 'pack']);
 watcher.on('change', function(event) {
   console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
 });

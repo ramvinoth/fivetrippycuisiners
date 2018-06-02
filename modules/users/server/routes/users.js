@@ -9,6 +9,12 @@ module.exports = function(System) {
   
   routes.push({
     method: 'post',
+    path: '/auth/facebook',
+    handler: users.social
+  });
+
+  routes.push({
+    method: 'post',
     path: '/',
     handler: users.create
   });

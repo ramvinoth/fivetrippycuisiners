@@ -430,9 +430,39 @@ angular.module('atwork.users')
     'appStorage',
     'appLocation',
     'appDialog',
-    function($scope, $rootScope, appUsers, appAuth, appToast, appStorage, appLocation, appDialog) {
+    '$auth',
+    function($scope, $rootScope, appUsers, appAuth, appToast, appStorage, appLocation, appDialog, $auth) {
       // $scope.email = 'riten.sv@gmail.com';
       // $scope.password = 'jjk3e0jx';
+
+      //Social login - satellizer
+     $scope.authenticate = function(provider) {
+        $auth.authenticate(provider).then(function(res) {
+          var response = res.data;
+          if (response.success) {
+            appToast('You have successfully signed in with ' + provider + '!');
+            var record = response.res.record;
+            $scope.postLogin(record, response.res.token);
+            $rootScope.currUserId = record._id;
+            $rootScope.currUserRoles = record.roles;
+            $rootScope.currUserDesig = record.designation? record.designation : "user";
+          } else {
+            appToast(response.res.message);
+          }
+        })
+        .catch(function(error) {
+          if (error.message) {
+            // Satellizer promise reject error.
+            appToast(error.message);
+          } else if (error.data) {
+            // HTTP response error from server
+            appToast(error.data.message+' status: '+ error.status);
+          } else {
+            appToast(error);
+          }
+        });
+      };
+    /*Social login - satellizer END*/
 
       /**
        * Reset the form
@@ -566,7 +596,7 @@ angular.module('atwork.users')
           appToast('Something is missing.');
         }
       };
-
+      
       /**
        * Routine to perform after login is successful
        * @param  {String} token The user token

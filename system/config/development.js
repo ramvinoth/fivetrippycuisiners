@@ -21,5 +21,7 @@ module.exports = {
   aws: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-  }
+  },
+  FACEBOOK_SECRET: 'bb0908d09db0197a9988152a322e41a4',
+  NEWRELIC_LICENCE_KEY: '9ce3a29fe56a6dbe4fdf7a0c2f45662604fcc477',
 };

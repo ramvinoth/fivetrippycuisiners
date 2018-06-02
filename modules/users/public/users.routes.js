@@ -88,5 +88,5 @@ angular.module('atwork.users')
         controller: 'ProfileCtrl'
       })
       ;
-    $locationProvider.html5Mode(true);
+      $locationProvider.html5Mode(true);
   }]);
